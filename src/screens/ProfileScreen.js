@@ -7,7 +7,7 @@ function ProfileScreen({navigation}) {
     return <SafeAreaView style={styles.container}>
         <View>
         <TouchableOpacity style={styles.redButton}>
-            <Text style={styles.buttonText}>LOG OUT</Text>
+            <Text style={styles.whiteButtonText}>LOG OUT</Text>
         </TouchableOpacity>
         </View>
     </SafeAreaView>

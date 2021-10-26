@@ -1,11 +1,12 @@
 import React from 'react';
 import { StyleSheet } from 'react-native';
+import components from './Components';
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
         justifyContent: 'flex-end',
-        margin: 18
+        backgroundColor: 'white',
     },
     row: {
         flexDirection: 'row',
@@ -14,51 +15,79 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'stretch',
     },
-    button: {
-        borderRadius: 10,
-        paddingVertical: 20,
-        margin: 18,
+    profileContainer: {
+        flex: 1,
         alignItems: 'center',
+        justifyContent: 'center'
     },
-    redButton: { 
+    redButton: {
+        ...components.button, 
         backgroundColor: '#EF4836',
-        borderRadius: 10,
-        paddingVertical: 20,
-        margin: 18,
-        alignItems: 'center',
     },
     greenButton: { 
+        ...components.button, 
         backgroundColor: '#94DE45',
-        borderRadius: 10,
-        paddingVertical: 20,
-        margin: 18,
-        alignItems: 'center',
     },
     purpleButton: { 
+        ...components.button, 
         backgroundColor: '#7719B2',
-        borderRadius: 10,
-        paddingVertical: 20,
-        margin: 18,
-        alignItems: 'center',
+    },
+    lightPurpleButton: { 
+        ...components.button, 
+        backgroundColor: '#EFEBFF',
     },
     inactiveButton: {
+        ...components.button, 
         backgroundColor: '#EDEDED',
-        borderRadius: 10,
-        paddingVertical: 20,
-        margin: 18,
-        alignItems: 'center',
     },
-    buttonText: {
+    whiteButtonText: {
+        ...components.boldText,
         color: 'white',
-        fontWeight: 'bold'
+    },
+    purpleButtonText: {
+        ...components.boldText,
+        color: '#7719B2',
     },
     inactiveButtonText: {
+        ...components.boldText,
         color: '#A2A2A2',
-        fontWeight: 'bold'
+    },
+    boldPurpleText: {
+        ...components.boldText,
+        color: '#7719B2',
+    },
+    regularText: {
+        ...components.regularText,
+        color: '#2C2C2C',
     },
     whiteIcon: {
+        ...components.icon,
         color: 'white',
-        marginBottom: 16
+    },
+    purpleIcon: {
+        ...components.icon,
+        color: '#7719B2',
+    },
+    profileImage: {
+        width: 150,
+        height: 150,
+        borderRadius: 150 / 2,
+        overflow: "hidden",
+    },
+    backgroundImage: {
+        flex: 1, 
+        justifyContent: "flex-end"
+    },
+    profileTextTopMargin: {
+        marginTop: 9
+    },
+    input: {
+        ...components.input
+    },
+    inputText: {
+        ...components.boldText,
+        color: 'white',
+        marginLeft: 18
     }
 });
 
