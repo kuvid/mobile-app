@@ -52,6 +52,10 @@ const styles = StyleSheet.create({
         ...components.boldText,
         color: '#A2A2A2',
     },
+    boldText: {
+        ...components.boldText,
+        color: '#2C2C2C',
+    },
     boldPurpleText: {
         ...components.boldText,
         color: '#7719B2',
@@ -75,8 +79,8 @@ const styles = StyleSheet.create({
         overflow: "hidden",
     },
     backgroundImage: {
-        flex: 1, 
-        justifyContent: "flex-end"
+        flex: 1,
+        paddingTop: 18
     },
     profileTextTopMargin: {
         marginTop: 9

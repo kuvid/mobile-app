@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import HomeScreen from './src/screens/HomeScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import LoginScreen from './src/screens/LoginScreen';
+import AttendanceScreen from './src/screens/AttendanceScreen';
 import { createStackNavigator } from 'react-navigation-stack';
 
 const Drawer = createDrawerNavigator();
@@ -15,6 +16,7 @@ export default function App() {
         <Drawer.Screen name="Home" component={HomeScreen} />
         <Drawer.Screen name="Profile" component={ProfileScreen} />
         <Drawer.Screen name="Login" component={LoginScreen} />
+        <Drawer.Screen name="Attendance" component={AttendanceScreen} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
