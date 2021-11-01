@@ -5,9 +5,18 @@ import HomeScreen from './src/screens/HomeScreen';
 import ProfileScreen from './src/screens/ProfileScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import AttendanceScreen from './src/screens/AttendanceScreen';
-import { createStackNavigator } from 'react-navigation-stack';
 
-const Drawer = createDrawerNavigator();
+import DrawerNavigator from './src/navigation/DrawerNavigator';
+
+export default function App()  {
+  return(
+    <NavigationContainer>
+      <DrawerNavigator />
+    </NavigationContainer>
+  )
+}
+
+/*const Drawer = createDrawerNavigator();
 
 export default function App() {
   return (
@@ -20,7 +29,7 @@ export default function App() {
       </Drawer.Navigator>
     </NavigationContainer>
   );
-}
+}*/
 
 /* function HomeScreen({ navigation }) {
   return (

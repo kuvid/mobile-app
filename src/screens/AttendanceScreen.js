@@ -5,7 +5,7 @@ import dummyAttendanceData from '../dummies/dummyAttendanceData';
 import ListElement from '../components/ListElement';
 
 function AttendanceScreen({navigation}) {
-    return <SafeAreaView style={[styles.container], {justifyContent: 'flex-start',}}>
+    return <SafeAreaView style={[styles.container], {justifyContent: 'flex-start'}}>
     <View>
         <FlatList 
             data={dummyAttendanceData} 

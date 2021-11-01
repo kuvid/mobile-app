@@ -1,0 +1,36 @@
+import React from "react";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { Button } from "react-native";
+
+import HomeScreen from "../screens/HomeScreen";
+import AttendanceScreen from "../screens/AttendanceScreen";
+import ProfileScreen from "../screens/ProfileScreen";
+
+const Stack = createNativeStackNavigator();
+
+const MainStackNavigator = () => {
+    return (
+        <Stack.Navigator initialRouteName="Home" screenOptions={screenStyle} >
+            <Stack.Screen name="Welcome to KUVID!" component={HomeScreen}/>
+            <Stack.Screen name="Attendance" component={AttendanceScreen} />
+        </Stack.Navigator>
+    )
+}
+
+const ProfileStackNavigator = () => {
+    return (
+        <Stack.Navigator screenOptions={screenStyle} >
+            <Stack.Screen name="My Profile" component={ProfileScreen}/>
+        </Stack.Navigator>
+    )
+}
+
+const screenStyle = {
+    headerStyle: {
+      backgroundColor: '#EFEBFF',
+    },
+    headerTintColor: '#7719B2',
+    headerBackTitle: "Back",
+  }
+
+export { MainStackNavigator, ProfileStackNavigator };
