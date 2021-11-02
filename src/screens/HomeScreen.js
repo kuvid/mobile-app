@@ -1,10 +1,13 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { View, Text, SafeAreaView, TouchableOpacity, Image } from 'react-native';
 import { Icon } from 'react-native-elements';
 import styles from '../styles/Style';
 import dummyUserData from '../dummies/dummyUserData';
+import DataContext from '../context/DataContext';
 
 function HomeScreen({navigation}) {
+    const {addAttendanceData} = useContext(DataContext);
+
     return <SafeAreaView style={styles.container}>
         <View style={styles.profileContainer}>
             <Image source={require('../images/girl.png')} style={styles.profileImage}/>
@@ -19,7 +22,7 @@ function HomeScreen({navigation}) {
                 </TouchableOpacity>
             </View>
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.lightPurpleButton}>
+                <TouchableOpacity style={styles.lightPurpleButton} onPress={addAttendanceData}>
                     <Icon iconStyle={styles.purpleIcon} size={48} name='wifi' type='material-community'/>
                     <Text style={styles.purpleButtonText}>Self-Register</Text>
                 </TouchableOpacity>

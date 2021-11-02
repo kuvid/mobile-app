@@ -1,18 +1,15 @@
 import * as React from 'react';
-import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
-import HomeScreen from './src/screens/HomeScreen';
-import ProfileScreen from './src/screens/ProfileScreen';
-import LoginScreen from './src/screens/LoginScreen';
-import AttendanceScreen from './src/screens/AttendanceScreen';
-
 import DrawerNavigator from './src/navigation/DrawerNavigator';
+import { DataProvider } from './src/context/DataContext';
 
 export default function App()  {
   return(
-    <NavigationContainer>
-      <DrawerNavigator />
-    </NavigationContainer>
+    <DataProvider>
+      <NavigationContainer>
+        <DrawerNavigator />
+      </NavigationContainer>
+    </DataProvider>
   )
 }
 
