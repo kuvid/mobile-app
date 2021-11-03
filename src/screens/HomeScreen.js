@@ -3,10 +3,10 @@ import { View, Text, SafeAreaView, TouchableOpacity, Image } from 'react-native'
 import { Icon } from 'react-native-elements';
 import styles from '../styles/Style';
 import dummyUserData from '../dummies/dummyUserData';
-import DataContext from '../context/DataContext';
+import AttendanceDataContext from '../context/AttendanceDataContext';
 
 function HomeScreen({navigation}) {
-    const {addAttendanceData} = useContext(DataContext);
+    const {addAttendanceData} = useContext(AttendanceDataContext);
 
     return <SafeAreaView style={styles.container}>
         <View style={styles.profileContainer}>

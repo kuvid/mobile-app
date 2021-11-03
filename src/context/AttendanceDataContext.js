@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import moment from "moment";
 
-const DataContext = React.createContext();
+const AttendanceDataContext = React.createContext();
 
-export const DataProvider = ({children}) => {
+export const AttendanceDataProvider = ({children}) => {
 
     const [attendanceData, setAttendanceData] = useState([]);
 
@@ -16,12 +16,12 @@ export const DataProvider = ({children}) => {
             classroom: "ABCD45"}]);
     }
     
-    return <DataContext.Provider value={{attendanceData, addAttendanceData}}>
+    return <AttendanceDataContext.Provider value={{attendanceData, addAttendanceData}}>
         {children}
-    </DataContext.Provider>;
+    </AttendanceDataContext.Provider>;
 };
 
-export default DataContext;
+export default AttendanceDataContext;
 
 /**
  * const attendanceData = [{

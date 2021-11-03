@@ -3,11 +3,11 @@ import { View, Text, SafeAreaView, TouchableOpacity, FlatList, StyleSheet } from
 import styles from '../styles/Style';
 //import dummyAttendanceData from '../dummies/dummyAttendanceData';
 import ListElement from '../components/ListElement';
-import DataContext from '../context/DataContext';
+import AttendanceDataContext from '../context/AttendanceDataContext';
 
 function AttendanceScreen({navigation}) {
     
-    const {attendanceData} = useContext(DataContext);
+    const {attendanceData} = useContext(AttendanceDataContext);
     
     return <SafeAreaView style={[styles.container], {justifyContent: 'flex-start'}}>
     <View>

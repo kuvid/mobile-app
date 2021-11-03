@@ -5,6 +5,7 @@ import { Button } from "react-native";
 import HomeScreen from "../screens/HomeScreen";
 import AttendanceScreen from "../screens/AttendanceScreen";
 import ProfileScreen from "../screens/ProfileScreen";
+import LoginScreen from "../screens/LoginScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -25,6 +26,16 @@ const ProfileStackNavigator = () => {
     )
 }
 
+const AuthStackNavigator = ({login}) => {
+    return (
+        <Stack.Navigator screenOptions={screenStyle} >
+            <Stack.Screen name="Login"> 
+                <LoginScreen login={login}/>
+            </Stack.Screen>
+        </Stack.Navigator>
+    )
+}
+
 const screenStyle = {
     headerStyle: {
       backgroundColor: '#EFEBFF',
@@ -33,4 +44,4 @@ const screenStyle = {
     headerBackTitle: "Back",
   }
 
-export { MainStackNavigator, ProfileStackNavigator };
+export { MainStackNavigator, ProfileStackNavigator, AuthStackNavigator };

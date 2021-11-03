@@ -1,17 +1,26 @@
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import DrawerNavigator from './src/navigation/DrawerNavigator';
-import { DataProvider } from './src/context/DataContext';
+import { AttendanceDataProvider } from './src/context/AttendanceDataContext';
+import Amplify from 'aws-amplify';
+import awsConfig from './src/aws-exports';
+import AuthLoadingScreen from './src/navigation/index'
 
-export default function App()  {
+Amplify.configure(awsConfig);
+
+import { withAuthenticator } from 'aws-amplify-react-native';
+
+function App()  {
   return(
-    <DataProvider>
-      <NavigationContainer>
-        <DrawerNavigator />
-      </NavigationContainer>
-    </DataProvider>
-  )
+    <AttendanceDataProvider>
+      <AuthLoadingScreen />
+    </AttendanceDataProvider>
+  );
 }
+
+export default withAuthenticator(App);
+
+
 
 /*const Drawer = createDrawerNavigator();
 
