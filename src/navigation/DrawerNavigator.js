@@ -7,7 +7,7 @@ import { ProfileStackNavigator } from "./StackNavigator";
 
 const Drawer = createDrawerNavigator();
 
-const DrawerNavigator = () => {
+const DrawerNavigator = ({signout}) => {
     return (
         <Drawer.Navigator screenOptions={{headerShown: false}}>
             <Drawer.Screen name="Home" component={MainStackNavigator}/>

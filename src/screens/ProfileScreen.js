@@ -3,7 +3,7 @@ import { View, Text, SafeAreaView, TouchableOpacity } from 'react-native';
 import styles from '../styles/Style';
 
 
-function ProfileScreen({navigation}) {
+function ProfileScreen() {
     return <SafeAreaView style={styles.container}>
         <View>
         <TouchableOpacity style={styles.redButton}>

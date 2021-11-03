@@ -9,11 +9,12 @@ import LoginScreen from "../screens/LoginScreen";
 
 const Stack = createNativeStackNavigator();
 
-const MainStackNavigator = () => {
+const MainStackNavigator = ({signout}) => {
     return (
         <Stack.Navigator initialRouteName="Home" screenOptions={screenStyle} >
             <Stack.Screen name="Welcome to KUVID!" component={HomeScreen}/>
             <Stack.Screen name="Attendance" component={AttendanceScreen} />
+            <Stack.Screen name="My Profile" component={ProfileScreen} />
         </Stack.Navigator>
     )
 }
@@ -21,7 +22,7 @@ const MainStackNavigator = () => {
 const ProfileStackNavigator = () => {
     return (
         <Stack.Navigator screenOptions={screenStyle} >
-            <Stack.Screen name="My Profile" component={ProfileScreen}/>
+            <Stack.Screen name="My Profile" component={ProfileScreen} /> 
         </Stack.Navigator>
     )
 }

@@ -4,7 +4,7 @@ import { View, Text, SafeAreaView, TouchableOpacity, ImageBackground, TextInput 
 import styles from '../styles/Style';
 import Auth from '@aws-amplify/auth';
 
-function LoginScreen({login: loginCb}) {
+export default function LoginScreen({login: loginCb}) {
 
     const [email, onChangeEmail] = useState('');
     const [password, onChangePassword] = useState('');
@@ -52,5 +52,3 @@ function LoginScreen({login: loginCb}) {
             </ImageBackground>
     </SafeAreaView>
 }
-
-export default LoginScreen;

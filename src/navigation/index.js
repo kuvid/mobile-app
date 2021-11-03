@@ -4,8 +4,8 @@ import {
 } from 'react-native';
 import Auth from '@aws-amplify/auth';
 import { NavigationContainer } from '@react-navigation/native';
-import { AuthStackNavigator } from './StackNavigator';
-import { DrawerNavigator } from './DrawerNavigator';
+import { AuthStackNavigator, MainStackNavigator } from './StackNavigator';
+import DrawerNavigator from './DrawerNavigator';
 
 const styles = StyleSheet.create({
   container: {
@@ -61,7 +61,7 @@ class AuthLoadingScreen extends React.Component {
   render() {
     const { userToken, loading } = this.state;
     const showLoadingSpinner = (!userToken && loading);
-    let view = '';
+    var view = '';
     if (showLoadingSpinner) {
       view = (
         <View style={styles.container}>
@@ -71,15 +71,15 @@ class AuthLoadingScreen extends React.Component {
     } else if (!userToken) {
       view = <AuthStackNavigator login={this.signIn} />;
     } else {
-      view = <DrawerNavigator />;
+      view = <DrawerNavigator signout={this.signOut}/>;
     }
     return (
       <NavigationContainer>
         {view}
       </NavigationContainer>
     );
-  };
-};
+  }
+}
 
 
 export default AuthLoadingScreen;
