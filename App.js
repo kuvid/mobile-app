@@ -8,9 +8,9 @@ import AuthLoadingScreen from './src/navigation/index'
 
 Amplify.configure(awsConfig);
 
-//import { withAuthenticator } from 'aws-amplify-react-native';
+import { withAuthenticator } from 'aws-amplify-react-native';
 
-export default function App()  {
+function App()  {
   return(
     <AttendanceDataProvider>
       <AuthLoadingScreen />
@@ -18,7 +18,7 @@ export default function App()  {
   );
 }
 
-//export default withAuthenticator(App);
+export default withAuthenticator(App);
 
 
 

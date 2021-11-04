@@ -10,7 +10,7 @@ function HomeScreen({navigation}) {
 
     return <SafeAreaView style={styles.container}>
         <View style={styles.profileContainer}>
-            <Image source={require('../images/girl.png')} style={styles.profileImage}/>
+            <Image source={require('../images/girl.png')} style={styles.profileImage} />
             <Text style={[styles.boldPurpleText, styles.profileTextTopMargin]}>{dummyUserData[0].name} {dummyUserData[0].surname}</Text>
             <Text style={styles.regularText}>{dummyUserData[0].email}</Text>
         </View>

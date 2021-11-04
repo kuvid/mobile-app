@@ -11,7 +11,7 @@ const DrawerNavigator = ({signout}) => {
     return (
         <Drawer.Navigator screenOptions={{headerShown: false}}>
             <Drawer.Screen name="Home" component={MainStackNavigator}/>
-            <Drawer.Screen name="Profile" component={ProfileStackNavigator}/>
+            <Drawer.Screen name="Profile" component={ProfileStackNavigator} initialParams={{signout}}/>
         </Drawer.Navigator>
     )
 }

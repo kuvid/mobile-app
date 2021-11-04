@@ -3,14 +3,12 @@ import { View, Text, SafeAreaView, TouchableOpacity } from 'react-native';
 import styles from '../styles/Style';
 
 
-function ProfileScreen() {
+export default function ProfileScreen({ signout }) {
     return <SafeAreaView style={styles.container}>
         <View>
         <TouchableOpacity style={styles.redButton}>
-            <Text style={styles.whiteButtonText}>LOG OUT</Text>
+            <Text style={styles.whiteButtonText} onPress={()=>signout()}>LOG OUT</Text>
         </TouchableOpacity>
         </View>
     </SafeAreaView>
 }
-
-export default ProfileScreen;
