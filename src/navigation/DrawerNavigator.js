@@ -7,11 +7,11 @@ import { ProfileStackNavigator } from "./StackNavigator";
 
 const Drawer = createDrawerNavigator();
 
-const DrawerNavigator = ({signout}) => {
+const DrawerNavigator = () => {
     return (
         <Drawer.Navigator screenOptions={{headerShown: false}}>
             <Drawer.Screen name="Home" component={MainStackNavigator}/>
-            <Drawer.Screen name="Profile" component={ProfileStackNavigator} initialParams={{signout}}/>
+            <Drawer.Screen name="Profile" component={ProfileStackNavigator} />
         </Drawer.Navigator>
     )
 }

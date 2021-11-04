@@ -1,24 +1,25 @@
 import * as React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import DrawerNavigator from './src/navigation/DrawerNavigator';
-import { AttendanceDataProvider } from './src/context/AttendanceDataContext';
 import Amplify from 'aws-amplify';
 import awsConfig from './src/aws-exports';
-import AuthLoadingScreen from './src/navigation/index'
+import AuthLoadingScreen from './src/navigation/AuthLoadingScreen';
+import { AttendanceDataProvider } from './src/context/AttendanceDataContext';
+import { AuthProvider } from './src/context/AuthContext';
 
 Amplify.configure(awsConfig);
 
-import { withAuthenticator } from 'aws-amplify-react-native';
+//import { withAuthenticator } from 'aws-amplify-react-native';
 
-function App()  {
+export default function App()  {
   return(
-    <AttendanceDataProvider>
-      <AuthLoadingScreen />
-    </AttendanceDataProvider>
+    <AuthProvider>
+      <AttendanceDataProvider>
+        <AuthLoadingScreen />
+      </AttendanceDataProvider>
+    </AuthProvider>
   );
 }
 
-export default withAuthenticator(App);
+//export default withAuthenticator(App);
 
 
 
