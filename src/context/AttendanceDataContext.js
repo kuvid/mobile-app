@@ -1,5 +1,6 @@
 import React, { useState, useContext } from "react";
 import moment from "moment";
+import axios from "axios";
 import AuthContext from "./AuthContext";
 
 const AttendanceDataContext = React.createContext();
@@ -20,18 +21,32 @@ export const AttendanceDataProvider = ({children}) => {
     }
 
     const pullData = async () => {
-        await fetch('https://3mc5pe0gw4.execute-api.eu-central-1.amazonaws.com/Production/users', {
-        method: 'GET',
-        body: null,
-        headers: {
-          Authorization: 'Bearer ' + token, /* this is the JWT token from AWS Cognito. */
-          'Content-Type': 'application/json',
-        },
-      })
-      .then((response) => {
-          console.log(JSON.stringify(response, null, 2))
-      })
+        await axios.get("https://3mc5pe0gw4.execute-api.eu-central-1.amazonaws.com/Production/users", {
+            headers: {
+                'Authorization': 'Bearer ' + token, /* this is the JWT token from AWS Cognito. */
+                },
+        })
+            .then(response => {
+                console.log('getting data from axios', response.data);
+            })
+            .catch(error => {
+                console.log(error);
+            });
     }
+
+    // const pullData = async () => {
+    //     await fetch('https://3mc5pe0gw4.execute-api.eu-central-1.amazonaws.com/Production/users', {
+    //     method: 'GET',
+    //     body: null,
+    //     headers: {
+    //       Authorization: 'Bearer ' + token, /* this is the JWT token from AWS Cognito. */
+    //       'Content-Type': 'application/json',
+    //     },
+    //   })
+    //   .then((response) => {
+    //       console.log(JSON.stringify(response, null, 2))
+    //   })
+    // }
     
     return <AttendanceDataContext.Provider value={{attendanceData, addAttendanceData, pullData}}>
         {children}

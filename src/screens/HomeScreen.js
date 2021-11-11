@@ -13,6 +13,9 @@ function HomeScreen({navigation}) {
             <Image source={require('../images/girl.png')} style={styles.profileImage} />
             <Text style={[styles.boldPurpleText, styles.profileTextTopMargin]}>{dummyUserData[0].name} {dummyUserData[0].surname}</Text>
             <Text style={styles.regularText}>{dummyUserData[0].email}</Text>
+            <TouchableOpacity onPress={()=>navigation.navigate("Notifications")}>
+                <Text>NOTIF</Text>
+            </TouchableOpacity>
         </View>
         <View style={styles.row}>
             <View style={styles.buttonContainer}>
