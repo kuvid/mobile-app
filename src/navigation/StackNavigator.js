@@ -14,16 +14,7 @@ const Stack = createNativeStackNavigator();
 const MainStackNavigator = ({navigation}) => {
     return (
         <Stack.Navigator initialRouteName="Home" screenOptions={screenStyle} >
-            <Stack.Screen name="Welcome to KUVID!" component={HomeScreen} options={{
-          headerRight: ()=>(<TouchableOpacity style={ [{paddingHorizontal:15}] }
-          onPress={() => navigation.navigate({ routeName: 'Notifications'})}>
-          <Icon
-            name="bell"
-            type='material-community'
-            size={24}
-            iconStyle={{ color: "#7719B2" }}/>
-        </TouchableOpacity>)
-        }}/>
+            <Stack.Screen name="Welcome to KUVID!" component={HomeScreen} />
             <Stack.Screen name="Attendance" component={AttendanceScreen} />
             <Stack.Screen name="Notifications" component={NotificationScreen} />
         </Stack.Navigator>

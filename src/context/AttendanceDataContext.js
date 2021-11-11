@@ -21,12 +21,14 @@ export const AttendanceDataProvider = ({children}) => {
     }
 
     const pullData = async () => {
-        await axios.get("https://3mc5pe0gw4.execute-api.eu-central-1.amazonaws.com/Production/users", {
+        await axios.get("https://3mc5pe0gw4.execute-api.eu-central-1.amazonaws.com/Production/lectures", {
             headers: {
                 'Authorization': 'Bearer ' + token, /* this is the JWT token from AWS Cognito. */
                 },
         })
             .then(response => {
+                //setUsername(response.data[0].Username);
+                //console.log("username:"+response.data[0].Username);
                 console.log('getting data from axios', response.data);
             })
             .catch(error => {

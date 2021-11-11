@@ -7,6 +7,8 @@ export const AuthProvider = ({children}) => {
 
     const [token, setToken] = useState('');
     const [loading, setLoading] = useState(true);
+    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
 
     const loadApp = async () => {
         await Auth.currentAuthenticatedUser()
@@ -28,12 +30,14 @@ export const AuthProvider = ({children}) => {
       };
 
     const signIn = async (user) => {
-        console.log(user.signInUserSession);
+        //console.log(user.signInUserSession);
         setToken(user.signInUserSession.accessToken.jwtToken);
+        setUsername(user.signInUserSession.accessToken.payload.username);
+        setEmail(user.signInUserSession.idToken.payload.email);
         
     }
     
-    return <AuthContext.Provider value={{token, loading, loadApp, signIn, signOut}}>
+    return <AuthContext.Provider value={{token, loading, username, email, loadApp, signIn, signOut}}>
         {children}
     </AuthContext.Provider>;
 };
