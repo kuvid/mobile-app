@@ -21,12 +21,14 @@ export const AuthProvider = ({children}) => {
       setLoading(false);
     }
 
-    const signOut = async () => {
+    const signOut = async () => { 
         await Auth.signOut()
           .catch((err) => {
             console.log('ERROR: ', err);
           });
         setToken('');
+        setUsername('');
+        setEmail('');
       };
 
     const signIn = async (user) => {
