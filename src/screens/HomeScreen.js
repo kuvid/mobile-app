@@ -6,7 +6,7 @@ import dummyUserData from '../dummies/dummyUserData';
 import AttendanceDataContext from '../context/AttendanceDataContext';
 
 function HomeScreen({navigation}) {
-    const {addAttendanceData} = useContext(AttendanceDataContext);
+    const {addAttendanceData, pullData} = useContext(AttendanceDataContext);
 
     return <SafeAreaView style={styles.container}>
         <View style={styles.profileContainer}>
@@ -32,6 +32,12 @@ function HomeScreen({navigation}) {
         <TouchableOpacity style={styles.purpleButton}>
             <Icon iconStyle={styles.whiteIcon} size={48} name='doctor' type='material-community'/>
             <Text style={styles.whiteButtonText}>I HAVE COVID-19</Text>
+        </TouchableOpacity>
+        </View>
+        <View>
+        <TouchableOpacity style={styles.purpleButton} onPress={pullData}>
+            <Icon iconStyle={styles.whiteIcon} size={48} name='doctor' type='material-community'/>
+            <Text style={styles.whiteButtonText}>Pull Data</Text>
         </TouchableOpacity>
         </View>
     </SafeAreaView>

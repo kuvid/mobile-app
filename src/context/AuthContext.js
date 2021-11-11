@@ -28,7 +28,9 @@ export const AuthProvider = ({children}) => {
       };
 
     const signIn = async (user) => {
+        console.log(user.signInUserSession);
         setToken(user.signInUserSession.accessToken.jwtToken);
+        
     }
     
     return <AuthContext.Provider value={{token, loading, loadApp, signIn, signOut}}>

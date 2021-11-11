@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import moment from "moment";
+import AuthContext from "./AuthContext";
 
 const AttendanceDataContext = React.createContext();
 
 export const AttendanceDataProvider = ({children}) => {
+
+    const { token } = useContext(AuthContext);
 
     const [attendanceData, setAttendanceData] = useState([]);
 
@@ -15,8 +18,22 @@ export const AttendanceDataProvider = ({children}) => {
             lectureName: "XXX123",
             classroom: "ABCD45"}]);
     }
+
+    const pullData = async () => {
+        await fetch('https://3mc5pe0gw4.execute-api.eu-central-1.amazonaws.com/Production/users', {
+        method: 'GET',
+        body: null,
+        headers: {
+          Authorization: 'Bearer ' + token, /* this is the JWT token from AWS Cognito. */
+          'Content-Type': 'application/json',
+        },
+      })
+      .then((response) => {
+          console.log(JSON.stringify(response, null, 2))
+      })
+    }
     
-    return <AttendanceDataContext.Provider value={{attendanceData, addAttendanceData}}>
+    return <AttendanceDataContext.Provider value={{attendanceData, addAttendanceData, pullData}}>
         {children}
     </AttendanceDataContext.Provider>;
 };
