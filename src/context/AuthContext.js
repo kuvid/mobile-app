@@ -6,6 +6,7 @@ const AuthContext = React.createContext();
 export const AuthProvider = ({children}) => {
 
     const [token, setToken] = useState('');
+    const [idToken, setIdToken] = useState('');
     const [loading, setLoading] = useState(true);
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
@@ -27,6 +28,7 @@ export const AuthProvider = ({children}) => {
             console.log('ERROR: ', err);
           });
         setToken('');
+        setIdToken('');
         setUsername('');
         setEmail('');
       };
@@ -34,12 +36,13 @@ export const AuthProvider = ({children}) => {
     const signIn = async (user) => {
         //console.log(user.signInUserSession);
         setToken(user.signInUserSession.accessToken.jwtToken);
+        setIdToken(user.signInUserSession.idToken.jwtToken);
         setUsername(user.signInUserSession.accessToken.payload.username);
         setEmail(user.signInUserSession.idToken.payload.email);
         
     }
     
-    return <AuthContext.Provider value={{token, loading, username, email, loadApp, signIn, signOut}}>
+    return <AuthContext.Provider value={{token, idToken, loading, username, email, loadApp, signIn, signOut}}>
         {children}
     </AuthContext.Provider>;
 };

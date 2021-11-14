@@ -28,7 +28,7 @@ function HomeScreen({navigation}) {
         </View>
         <View style={styles.row}>
             <View style={styles.buttonContainer}>
-                <TouchableOpacity style={styles.lightPurpleButton} onPress={()=>navigation.navigate("Attendance")}>
+                <TouchableOpacity style={styles.lightPurpleButton} onPress={()=>{navigation.navigate("Attendance")}}>
                     <Icon iconStyle={styles.purpleIcon} size={48} name='school' type='material-community'/>
                     <Text style={styles.purpleButtonText}>My Attendance</Text>
                 </TouchableOpacity>
@@ -46,13 +46,13 @@ function HomeScreen({navigation}) {
             <Text style={styles.whiteButtonText}>I HAVE COVID-19</Text>
         </TouchableOpacity>
         </View>
-        {/* BUTTON FOR TESTING PURPOSES 
+        { true ? null :
         <View>
         <TouchableOpacity style={styles.purpleButton} onPress={pullData}>
             <Icon iconStyle={styles.whiteIcon} size={48} name='doctor' type='material-community'/>
             <Text style={styles.whiteButtonText}>Pull Data</Text>
         </TouchableOpacity>
-        </View> */}
+        </View>}
     </SafeAreaView>
 }
 

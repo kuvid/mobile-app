@@ -13,8 +13,8 @@ const Stack = createNativeStackNavigator();
 
 const MainStackNavigator = ({navigation}) => {
     return (
-        <Stack.Navigator initialRouteName="Home" screenOptions={screenStyle} >
-            <Stack.Screen name="Welcome to KUVID!" component={HomeScreen} />
+        <Stack.Navigator initialRouteName="Welcome" screenOptions={screenStyle} >
+            <Stack.Screen name="Welcome" component={HomeScreen} />
             <Stack.Screen name="Attendance" component={AttendanceScreen} />
             <Stack.Screen name="Notifications" component={NotificationScreen} />
         </Stack.Navigator>

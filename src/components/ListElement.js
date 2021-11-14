@@ -8,6 +8,23 @@ const ListElement = ({item}) => {
         <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <Image source={require('../images/coding.png')} style={elementStyles.image}/>
         <View style={{paddingLeft:18}}>
+            <Text style={styles.regularText}>{item.lecture_name}</Text>
+            <Text style={[styles.boldText, {marginTop: '1%'}]}>{item.instructor_name}</Text>
+        </View>
+        </View>
+        <View>
+            <Icon iconStyle={{color: "#94DE45"}} size={48} name='check' type='material-community'/>
+        </View>
+        
+    </View>
+}
+
+
+/* const ListElement = ({item}) => {
+    return <View style={elementStyles.container}>
+        <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <Image source={require('../images/coding.png')} style={elementStyles.image}/>
+        <View style={{paddingLeft:18}}>
             <Text style={styles.regularText}>{item.date}, {item.time}</Text>
             <Text style={[styles.boldText, {marginTop: '1%'}]}>{item.lectureName}</Text>
             <View style={{alignItems: 'baseline', marginTop: '5%'}}>
@@ -22,7 +39,7 @@ const ListElement = ({item}) => {
         </View>
         
     </View>
-}
+} */
 
 const elementStyles = StyleSheet.create({
     container: {

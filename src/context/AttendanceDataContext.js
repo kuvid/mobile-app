@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import moment from "moment";
 import axios from "axios";
 import AuthContext from "./AuthContext";
@@ -7,29 +7,47 @@ const AttendanceDataContext = React.createContext();
 
 export const AttendanceDataProvider = ({children}) => {
 
-    const { token } = useContext(AuthContext);
+    const { idToken } = useContext(AuthContext);
 
     const [attendanceData, setAttendanceData] = useState([]);
 
+    useEffect(() => {
+       pullData();
+    }, [idToken]);
+    
     const addAttendanceData = () => {
+        setAttendanceData([...attendanceData, 
+            {
+            instructor_name: "New Instructor",
+            lecture_name: `New Lecture ${attendanceData.length + 1}`}]);
+    }
+
+    const cleanData = () => {
+        setAttendanceData([]);
+    }
+
+    /*const addAttendanceData = () => {
         setAttendanceData([...attendanceData, 
             {key: `${attendanceData.length + 1}`,
             date: `${moment().format("DD MMM YYYY")}`,
             time: `${moment().format("HH.mm")}`,
             lectureName: "XXX123",
             classroom: "ABCD45"}]);
-    }
+    }*/
 
     const pullData = async () => {
-        await axios.get("https://3mc5pe0gw4.execute-api.eu-central-1.amazonaws.com/Production/lectures", {
+        await axios.get("https://3mc5pe0gw4.execute-api.eu-central-1.amazonaws.com/Production/attendance_records", {
             headers: {
-                'Authorization': 'Bearer ' + token, /* this is the JWT token from AWS Cognito. */
-                },
+                "Authorization" : `Bearer ${idToken}`, /* this is the JWT token from AWS Cognito. */
+                'Content-Type': 'application/json',    
+            },
         })
             .then(response => {
                 //setUsername(response.data[0].Username);
                 //console.log("username:"+response.data[0].Username);
-                console.log('getting data from axios', response.data);
+                //console.log('getting data from axios', response.data.body);
+                var tempResponse = eval(response.data.body);
+                setAttendanceData(tempResponse);
             })
             .catch(error => {
                 console.log(error);
@@ -37,7 +55,7 @@ export const AttendanceDataProvider = ({children}) => {
     }
 
     // const pullData = async () => {
-    //     await fetch('https://3mc5pe0gw4.execute-api.eu-central-1.amazonaws.com/Production/users', {
+    //     await fetch('https://3mc5pe0gw4.execute-api.eu-central-1.amazonaws.com/Production/attendance_records', {
     //     method: 'GET',
     //     body: null,
     //     headers: {
@@ -50,7 +68,7 @@ export const AttendanceDataProvider = ({children}) => {
     //   })
     // }
     
-    return <AttendanceDataContext.Provider value={{attendanceData, addAttendanceData, pullData}}>
+    return <AttendanceDataContext.Provider value={{attendanceData, addAttendanceData, pullData, cleanData}}>
         {children}
     </AttendanceDataContext.Provider>;
 };

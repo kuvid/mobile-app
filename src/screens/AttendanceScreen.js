@@ -16,9 +16,25 @@ function AttendanceScreen({navigation}) {
             renderItem={({item})=>{
                 return <ListElement item={item}/>
             }}
-            keyExtractor={item=>item.key.toString()}/>
+            keyExtractor={item=>item.lecture_name}/>
     </View>
 </SafeAreaView>
 }
+
+// function AttendanceScreen({navigation}) {
+    
+//     const {attendanceData} = useContext(AttendanceDataContext);
+    
+//     return <SafeAreaView style={[styles.container], {justifyContent: 'flex-start'}}>
+//     <View>
+//         <FlatList 
+//             data={attendanceData} 
+//             renderItem={({item})=>{
+//                 return <ListElement item={item}/>
+//             }}
+//             keyExtractor={item=>item.key.toString()}/>
+//     </View>
+// </SafeAreaView>
+// }
 
 export default AttendanceScreen;
