@@ -1,27 +1,28 @@
-import * as React from 'react';
-import Amplify from 'aws-amplify';
-import awsConfig from './src/aws-exports';
-import AuthLoadingScreen from './src/navigation/AuthLoadingScreen';
-import { AttendanceDataProvider } from './src/context/AttendanceDataContext';
-import { AuthProvider } from './src/context/AuthContext';
+import * as React from "react";
+import Amplify from "aws-amplify";
+import awsConfig from "./src/aws-exports";
+import AuthLoadingScreen from "./src/navigation/AuthLoadingScreen";
+import { AttendanceDataProvider } from "./src/context/AttendanceDataContext";
+import { AuthProvider } from "./src/context/AuthContext";
+import { CovidStatusProvider } from "./src/context/CovidStatusContext";
 
 Amplify.configure(awsConfig);
 
-//import { withAuthenticator } from 'aws-amplify-react-native';
+//import { withAuthenticator } from "aws-amplify-react-native";
 
-export default function App()  {
-  return(
+export default function App() {
+  return (
     <AuthProvider>
       <AttendanceDataProvider>
-        <AuthLoadingScreen />
+        <CovidStatusProvider>
+          <AuthLoadingScreen />
+        </CovidStatusProvider>
       </AttendanceDataProvider>
     </AuthProvider>
   );
 }
 
 //export default withAuthenticator(App);
-
-
 
 /*const Drawer = createDrawerNavigator();
 

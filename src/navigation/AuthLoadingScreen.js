@@ -1,26 +1,24 @@
-import React, {useContext, useEffect} from 'react';
-import {
-  StyleSheet, View, ActivityIndicator,
-} from 'react-native';
-import Auth from '@aws-amplify/auth';
-import { NavigationContainer } from '@react-navigation/native';
-import { AuthStackNavigator, MainStackNavigator } from './StackNavigator';
-import DrawerNavigator from './DrawerNavigator';
-import AuthContext from '../context/AuthContext';
-import AttendanceDataContext from '../context/AttendanceDataContext';
-import styles from '../styles/Style';
+import React, { useContext, useEffect } from "react";
+import { StyleSheet, View, ActivityIndicator } from "react-native";
+import Auth from "@aws-amplify/auth";
+import { NavigationContainer } from "@react-navigation/native";
+import { AuthStackNavigator, MainStackNavigator } from "./StackNavigator";
+import DrawerNavigator from "./DrawerNavigator";
+import AuthContext from "../context/AuthContext";
+import AttendanceDataContext from "../context/AttendanceDataContext";
+import styles from "../styles/Style";
 
-export default function AuthLoadingScreen () {
+export default function AuthLoadingScreen() {
   const { token, loading, loadApp } = useContext(AuthContext);
-  const { pullData, cleanData } = useContext(AttendanceDataContext); 
-  
+  const { pullData, cleanData } = useContext(AttendanceDataContext);
+
   useEffect(() => {
     cleanData();
     loadApp();
   }, []);
-  
-  const showLoadingSpinner = (!token && loading);
-  var view = '';
+
+  const showLoadingSpinner = !token && loading;
+  var view = "";
 
   if (showLoadingSpinner) {
     view = (
@@ -33,9 +31,5 @@ export default function AuthLoadingScreen () {
   } else {
     view = <DrawerNavigator />;
   }
-  return (
-    <NavigationContainer>
-      {view}
-    </NavigationContainer>
-  );
+  return <NavigationContainer>{view}</NavigationContainer>;
 }
