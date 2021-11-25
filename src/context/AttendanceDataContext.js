@@ -10,9 +10,9 @@ export const AttendanceDataProvider = ({ children }) => {
 
   const [attendanceData, setAttendanceData] = useState([]);
 
-  /*useEffect(() => {
+  /*   useEffect(() => {
     pullData();
-  }, [idToken]);*/
+  }, [idToken]); */
 
   const addAttendanceData = () => {
     setAttendanceData([
@@ -37,65 +37,6 @@ export const AttendanceDataProvider = ({ children }) => {
             classroom: "ABCD45"}]);
     }*/
 
-  // BU KOD INSTRUCTOR TARAFINDA ÇALIŞACAK, STUDENT LIST CONTEXT GİBİ BİR ŞEY GEREKEBİLİR
-  const sendAttendanceData = async () => {
-    await axios
-      .post(
-        "https://3mc5pe0gw4.execute-api.eu-central-1.amazonaws.com/Production/kuvid_take_attendance",
-        {
-          operation: "create",
-          payload: {
-            TableName: "attendance",
-            Item: {
-              lecture_name: "comp319",
-              timestamp: "2021-11-12T16:30:00",
-              instructor_id: 2,
-              instructor_name: "Barış Akgün",
-              instructor_email: "bakgun@ku.edu.tr",
-              students: [
-                {
-                  student_name: "Selin Öztürk",
-                  student_id: "60160",
-                },
-              ],
-            },
-          },
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${idToken}` /* this is the JWT token from AWS Cognito. */,
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
-  //BU KOD INSTRUCTOR TARAFINDA ÇALIŞACAK
-  const getInstructorAttendanceData = async () => {
-    await axios
-      .post(
-        "https://3mc5pe0gw4.execute-api.eu-central-1.amazonaws.com/Production/kuvid_get_students_list",
-        {
-          instructor_id: 1,
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${idToken}` /* this is the JWT token from AWS Cognito. */,
-            "Content-Type": "application/json",
-          },
-        }
-      )
-      .then((response) => {
-        console.log(response.data.body);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  };
-
   const pullData = async () => {
     await axios
       .post(
@@ -116,7 +57,7 @@ export const AttendanceDataProvider = ({ children }) => {
       .then((response) => {
         //setUsername(response.data[0].Username);
         //console.log("username:"+response.data[0].Username);
-        console.log("getting data from axios", response.data);
+        //console.log("getting data from axios", response.data);
         var tempResponse = eval(response.data.body);
         setAttendanceData(tempResponse);
       })
@@ -146,8 +87,6 @@ export const AttendanceDataProvider = ({ children }) => {
         addAttendanceData,
         pullData,
         cleanData,
-        sendAttendanceData,
-        getInstructorAttendanceData,
       }}
     >
       {children}

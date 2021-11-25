@@ -48,7 +48,7 @@ export const AuthProvider = ({ children }) => {
     setFamilyName(user.signInUserSession.idToken.payload.family_name);
     setIdNumber(user.signInUserSession.idToken.payload["custom:idNumber"]);
     setGroup(user.signInUserSession.idToken.payload["custom:group"]);
-    console.log(user.signInUserSession.idToken.payload["custom:group"]);
+    //console.log(user.signInUserSession.idToken.payload["custom:group"]);
   };
 
   return (
@@ -62,6 +62,7 @@ export const AuthProvider = ({ children }) => {
         name,
         familyName,
         idNumber,
+        group,
         loadApp,
         signIn,
         signOut,

@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -10,44 +10,33 @@ import { Icon } from "react-native-elements";
 import styles from "../styles/Style";
 import AttendanceDataContext from "../context/AttendanceDataContext";
 import AuthContext from "../context/AuthContext";
+import StudentListContext from "../context/StudentListContext";
 import CovidStatusContext from "../context/CovidStatusContext";
+import HomeScreenLayout from "../components/HomeScreenLayout";
+import CourseListScreen from "./CourseListScreen";
 import axios from "axios";
 import moment from "moment";
 
 function HomeScreen({ navigation }) {
+  const { addAttendanceData } = useContext(AttendanceDataContext);
+  const { sendStudentList, getStudentList } = useContext(StudentListContext);
+  const { name, familyName, email, group } = useContext(AuthContext);
   const {
-    addAttendanceData,
-    pullData,
-    sendAttendanceData,
-    getInstructorAttendanceData,
-  } = useContext(AttendanceDataContext);
-  const { username, email } = useContext(AuthContext);
-  const { covidStatus, sendCovidStatusPositive, getCovidStatus } =
-    useContext(CovidStatusContext);
+    covidStatus,
+    sendCovidStatusPositive,
+    getCovidStatus,
+    storeCovidStatusPositiveLocally,
+  } = useContext(CovidStatusContext);
 
-  //   async function sendCovidStatus() {
-  //     await axios
-  //       .post(
-  //         "https://3mc5pe0gw4.execute-api.eu-central-1.amazonaws.com/Production/covid_status",
-  //         {
-  //           covid_code: "123",
-  //           covid_status: "Positive",
-  //           update_date: Date(),
-  //         },
-  //         {
-  //           headers: {
-  //             Authorization: `Bearer ${idToken}` /* this is the JWT token from AWS Cognito. */,
-  //             "Content-Type": "application/json",
-  //           },
-  //         }
-  //       )
-  //       .then(() => {
-  //         console.log(typeof Date());
-  //       })
-  //       .catch((error) => {
-  //         console.log(error);
-  //       });
-  //   }
+  var [isCovidPositive, setIsCovidPositive] = useState(
+    covidStatus === "Positive"
+  );
+
+  //console.log(covidStatus);
+
+  useEffect(() => {
+    setIsCovidPositive(covidStatus === "Positive");
+  }, [covidStatus]);
 
   return (
     <SafeAreaView style={styles.container}>
@@ -68,7 +57,7 @@ function HomeScreen({ navigation }) {
           style={styles.profileImage}
         />
         <Text style={[styles.boldPurpleText, styles.profileTextTopMargin]}>
-          {username}
+          {name} {familyName}
         </Text>
         <Text style={styles.regularText}>{email}</Text>
       </View>
@@ -77,7 +66,11 @@ function HomeScreen({ navigation }) {
           <TouchableOpacity
             style={styles.lightPurpleButton}
             onPress={() => {
-              navigation.navigate("Attendance");
+              if (group === "Student") {
+                navigation.navigate("Attendance");
+              } else if (group === "Instructor") {
+                navigation.navigate("CourseList");
+              }
             }}
           >
             <Icon
@@ -86,43 +79,89 @@ function HomeScreen({ navigation }) {
               name="school"
               type="material-community"
             />
-            <Text style={styles.purpleButtonText}>My Attendance</Text>
+            {group === "Student" ? (
+              <Text style={styles.purpleButtonText}>My Attendance</Text>
+            ) : (
+              <Text style={styles.purpleButtonText}>My Courses</Text>
+            )}
           </TouchableOpacity>
         </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity
-            style={styles.lightPurpleButton}
-            onPress={addAttendanceData}
+            style={
+              isCovidPositive ? styles.inactiveButton : styles.lightPurpleButton
+            }
+            onPress={() => {
+              if (group === "Student") addAttendanceData();
+              //if (group === "Student") sendStudentList();
+              // burası silincek
+              //else sendStudentList();
+              else {
+                navigation.navigate("TakeAttendance");
+              }
+            }}
+            disabled={isCovidPositive}
           >
             <Icon
-              iconStyle={styles.purpleIcon}
+              iconStyle={
+                isCovidPositive ? styles.inactiveIcon : styles.purpleIcon
+              }
               size={48}
               name="wifi"
               type="material-community"
             />
-            <Text style={styles.purpleButtonText}>Self-Register</Text>
+            {group === "Student" ? (
+              <Text
+                style={
+                  isCovidPositive
+                    ? styles.inactiveButtonText
+                    : styles.purpleButtonText
+                }
+              >
+                Self-Register
+              </Text>
+            ) : (
+              <Text
+                style={
+                  isCovidPositive
+                    ? styles.inactiveButtonText
+                    : styles.purpleButtonText
+                }
+              >
+                Take Attendance
+              </Text>
+            )}
           </TouchableOpacity>
         </View>
       </View>
       <View>
         <TouchableOpacity
-          style={styles.purpleButton}
-          onPress={sendCovidStatusPositive}
+          style={isCovidPositive ? styles.inactiveButton : styles.purpleButton}
+          onPress={storeCovidStatusPositiveLocally}
+          disabled={isCovidPositive}
         >
           <Icon
-            iconStyle={styles.whiteIcon}
+            iconStyle={isCovidPositive ? styles.inactiveIcon : styles.whiteIcon}
             size={48}
             name="doctor"
             type="material-community"
           />
-          <Text style={styles.whiteButtonText}>I HAVE COVID-19</Text>
+          <Text
+            style={
+              isCovidPositive
+                ? styles.inactiveButtonText
+                : styles.whiteButtonText
+            }
+          >
+            I HAVE COVID-19
+          </Text>
         </TouchableOpacity>
       </View>
-      {false ? null : (
+      {true ? null : (
         <View>
           <TouchableOpacity
             style={styles.purpleButton}
-            onPress={getInstructorAttendanceData}
+            onPress={getStudentList}
           >
             <Icon
               iconStyle={styles.whiteIcon}
@@ -130,9 +169,7 @@ function HomeScreen({ navigation }) {
               name="doctor"
               type="material-community"
             />
-            <Text style={styles.whiteButtonText}>
-              getInstructorAttendanceData
-            </Text>
+            <Text style={styles.whiteButtonText}>getStudentList</Text>
           </TouchableOpacity>
         </View>
       )}

@@ -7,15 +7,27 @@ import DrawerNavigator from "./DrawerNavigator";
 import AuthContext from "../context/AuthContext";
 import AttendanceDataContext from "../context/AttendanceDataContext";
 import styles from "../styles/Style";
+import StudentListContext from "../context/StudentListContext";
+import CovidStatusContext from "../context/CovidStatusContext";
 
 export default function AuthLoadingScreen() {
-  const { token, loading, loadApp } = useContext(AuthContext);
+  const { token, loading, loadApp, group } = useContext(AuthContext);
   const { pullData, cleanData } = useContext(AttendanceDataContext);
+  const { getStudentList } = useContext(StudentListContext);
+  const { getCovidStatus } = useContext(CovidStatusContext);
 
   useEffect(() => {
     cleanData();
     loadApp();
   }, []);
+
+  useEffect(() => {
+    getCovidStatus();
+    if (group === "Student") pullData();
+    else {
+      getStudentList();
+    }
+  }, [loading]);
 
   const showLoadingSpinner = !token && loading;
   var view = "";
