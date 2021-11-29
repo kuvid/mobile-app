@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   FlatList,
   StyleSheet,
+  ActivityIndicator,
 } from "react-native";
 
 import { Icon } from "react-native-elements";
@@ -14,9 +15,15 @@ import styles from "../styles/Style";
 import { dummyStudentData } from "../dummies/dummyStudentData";
 
 export default function TakeAttendanceScreen() {
-  const { sendStudentList } = useContext(StudentListContext);
+  const { sendStudentList, courseName } = useContext(StudentListContext);
+  const [spinnerShown, setSpinnerShown] = useState(true);
   useEffect(() => {
     sendStudentList();
+    const interval = setInterval(() => {
+      setSpinnerShown(false);
+    }, 3000);
+
+    return () => clearInterval(interval);
   }, []);
   return (
     <SafeAreaView
@@ -44,18 +51,25 @@ export default function TakeAttendanceScreen() {
         }}
         keyExtractor={(item) => item.student_id}
       />
-      <Text style={[styles.boldText, styles.profileTextTopMargin]}>
-        Attendance data successfully sent!
-      </Text>
 
-      <View>
-        <Icon
-          iconStyle={{ color: "#94DE45" }}
-          size={96}
-          name="check"
-          type="material-community"
-        />
-      </View>
+      {spinnerShown ? (
+        <View style={styles.container}>
+          <ActivityIndicator size="large" color="#aaa" />
+        </View>
+      ) : null}
+      {!spinnerShown ? (
+        <View>
+          <Text style={[styles.boldText, styles.profileTextTopMargin]}>
+            {`Attendance data successfully sent for your ${courseName} course!`}
+          </Text>
+          <Icon
+            iconStyle={{ color: "#94DE45" }}
+            size={96}
+            name="check"
+            type="material-community"
+          />
+        </View>
+      ) : null}
     </SafeAreaView>
   );
 }

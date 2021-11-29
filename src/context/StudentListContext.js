@@ -9,6 +9,7 @@ export const StudentListProvider = ({ children }) => {
   const { idToken, email, name, familyName, idNumber } =
     useContext(AuthContext);
   const [studentList, setStudentList] = useState([]);
+  const [courseName, setCourseName] = useState("comp130");
 
   // BU KOD INSTRUCTOR TARAFINDA ÇALIŞACAK, STUDENT LIST CONTEXT GİBİ BİR ŞEY GEREKEBİLİR
   const sendStudentList = async () => {
@@ -20,7 +21,7 @@ export const StudentListProvider = ({ children }) => {
           payload: {
             TableName: "attendance",
             Item: {
-              lecture_name: "comp439",
+              lecture_name: `${courseName}`,
               timestamp: "2021-11-26T12:35:00",
               instructor_id: parseInt(`${idNumber}`),
               instructor_name: `${name} ${familyName}`,
@@ -71,7 +72,7 @@ export const StudentListProvider = ({ children }) => {
 
   return (
     <StudentListContext.Provider
-      value={{ studentList, sendStudentList, getStudentList }}
+      value={{ courseName, studentList, sendStudentList, getStudentList }}
     >
       {children}
     </StudentListContext.Provider>

@@ -18,8 +18,9 @@ import axios from "axios";
 import moment from "moment";
 
 function HomeScreen({ navigation }) {
-  const { addAttendanceData } = useContext(AttendanceDataContext);
-  const { sendStudentList, getStudentList } = useContext(StudentListContext);
+  const { addAttendanceData, pullData } = useContext(AttendanceDataContext);
+  const { sendStudentList, getStudentList, courseName } =
+    useContext(StudentListContext);
   const { name, familyName, email, group } = useContext(AuthContext);
   const {
     covidStatus,
@@ -52,14 +53,24 @@ function HomeScreen({ navigation }) {
         />
       </TouchableOpacity>
       <View style={styles.profileContainer}>
-        <Image
-          source={require("../images/girl.png")}
-          style={styles.profileImage}
-        />
+        {group === "Student" ? (
+          <Image
+            source={require("../images/girl.png")}
+            style={styles.profileImage}
+          />
+        ) : (
+          <Image
+            source={require("../images/instructor.png")}
+            style={styles.profileImage}
+          />
+        )}
         <Text style={[styles.boldPurpleText, styles.profileTextTopMargin]}>
           {name} {familyName}
         </Text>
         <Text style={styles.regularText}>{email}</Text>
+        {group === "Instructor" ? (
+          <Text style={styles.regularText}>{courseName}</Text>
+        ) : null}
       </View>
       <View style={styles.row}>
         <View style={styles.buttonContainer}>
@@ -67,8 +78,10 @@ function HomeScreen({ navigation }) {
             style={styles.lightPurpleButton}
             onPress={() => {
               if (group === "Student") {
+                pullData();
                 navigation.navigate("Attendance");
               } else if (group === "Instructor") {
+                getStudentList();
                 navigation.navigate("CourseList");
               }
             }}
