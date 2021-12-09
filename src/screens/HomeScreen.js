@@ -64,6 +64,7 @@ function HomeScreen({ navigation }) {
             style={styles.profileImage}
           />
         )}
+
         <Text style={[styles.boldPurpleText, styles.profileTextTopMargin]}>
           {name} {familyName}
         </Text>
@@ -113,7 +114,7 @@ function HomeScreen({ navigation }) {
                 navigation.navigate("TakeAttendance");
               }
             }}
-            disabled={isCovidPositive}
+            //disabled={isCovidPositive}
           >
             <Icon
               iconStyle={
@@ -172,17 +173,14 @@ function HomeScreen({ navigation }) {
       </View>
       {true ? null : (
         <View>
-          <TouchableOpacity
-            style={styles.purpleButton}
-            onPress={getStudentList}
-          >
+          <TouchableOpacity style={styles.greenButton} onPress={null}>
             <Icon
               iconStyle={styles.whiteIcon}
               size={48}
               name="doctor"
               type="material-community"
             />
-            <Text style={styles.whiteButtonText}>getStudentList</Text>
+            <Text style={styles.whiteButtonText}>scanAndConnect</Text>
           </TouchableOpacity>
         </View>
       )}

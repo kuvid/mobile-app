@@ -8,6 +8,7 @@ import {
   StyleSheet,
   ActivityIndicator,
 } from "react-native";
+import { manager } from "../bluetooth/BleManager";
 
 import { Icon } from "react-native-elements";
 import StudentListContext from "../context/StudentListContext";
@@ -15,6 +16,8 @@ import styles from "../styles/Style";
 import { dummyStudentData } from "../dummies/dummyStudentData";
 
 export default function TakeAttendanceScreen() {
+  const [deviceNames, setDeviceNames] = useState("hello");
+
   const { sendStudentList, courseName } = useContext(StudentListContext);
   const [spinnerShown, setSpinnerShown] = useState(true);
   useEffect(() => {
@@ -25,6 +28,40 @@ export default function TakeAttendanceScreen() {
 
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    manager.onStateChange((state) => {
+      const subscription = manager.onStateChange((state) => {
+        if (state === "PoweredOn") {
+          scanAndConnect();
+          alert("bişiler oluyo");
+          subscription.remove();
+        }
+      }, true);
+
+      return () => subscription.remove();
+    });
+  }, [manager]);
+
+  function scanAndConnect() {
+    manager.startDeviceScan(null, null, (error, device) => {
+      if (error) {
+        // Handle error (scanning will be stopped automatically)
+        return;
+      }
+      //setDeviceNames(device.name);
+      alert(device.name);
+      // Check if it is a device you are looking for based on advertisement data
+      // or other criteria.
+      // if (device.name === "TI BLE Sensor Tag" || device.name === "SensorTag") {
+      //   // Stop scanning as it's not necessary if you are scanning for one device.
+      //manager.stopDeviceScan();
+
+      //   // Proceed with connection.
+      // }
+    });
+  }
+
   return (
     <SafeAreaView
       style={{
@@ -33,6 +70,9 @@ export default function TakeAttendanceScreen() {
         backgroundColor: "white",
       }}
     >
+      <Text style={[styles.boldPurpleText, styles.profileTextTopMargin]}>
+        {deviceNames}
+      </Text>
       <FlatList
         data={dummyStudentData}
         renderItem={({ item }) => {
