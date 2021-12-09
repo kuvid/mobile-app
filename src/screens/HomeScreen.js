@@ -114,7 +114,7 @@ function HomeScreen({ navigation }) {
                 navigation.navigate("TakeAttendance");
               }
             }}
-            //disabled={isCovidPositive}
+            disabled={isCovidPositive}
           >
             <Icon
               iconStyle={

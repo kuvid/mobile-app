@@ -14,7 +14,7 @@ export const AttendanceDataProvider = ({ children }) => {
     pullData();
   }, [idToken]); */
 
-  const addAttendanceData = () => {
+  /* const addAttendanceData = () => {
     setAttendanceData([
       ...attendanceData,
       {
@@ -22,6 +22,26 @@ export const AttendanceDataProvider = ({ children }) => {
         lecture_name: `New Lecture ${attendanceData.length + 1}`,
       },
     ]);
+  }; */
+
+  async function addAttendanceData(deviceName) {
+    return new Promise((resolve, reject) => {
+      //here our function should be implemented
+      console.log("attendance data eklicem");
+      setAttendanceData((attendanceData) => [
+        ...attendanceData,
+        {
+          deviceName: deviceName,
+          deviceId: `${attendanceData.length + 1}`,
+        },
+      ]);
+      console.log("attendance data added");
+      resolve();
+    });
+  }
+
+  const printBluetoothData = () => {
+    return attendanceData;
   };
 
   const cleanData = () => {
@@ -85,6 +105,7 @@ export const AttendanceDataProvider = ({ children }) => {
       value={{
         attendanceData,
         addAttendanceData,
+        printBluetoothData,
         pullData,
         cleanData,
       }}
