@@ -3,6 +3,8 @@ import AuthContext from "./AuthContext";
 import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+var _ = require("lodash");
+
 const CovidStatusContext = React.createContext();
 
 export const CovidStatusProvider = ({ children }) => {
@@ -10,6 +12,22 @@ export const CovidStatusProvider = ({ children }) => {
 
   const { idToken } = useContext(AuthContext);
   const [covidStatus, setCovidStatus] = useState("");
+
+  const [studentCovidCodes, setStudentCovidCodes] = useState([]);
+
+  async function addStudentCovidCode(covidCode, deviceId) {
+    return new Promise((resolve, reject) => {
+      //here our function should be implemented
+
+      setStudentCovidCodes((prev) =>
+        _.uniqBy(
+          [...prev, { covidCode: covidCode, deviceId: deviceId }],
+          "deviceId"
+        )
+      );
+      resolve();
+    });
+  }
 
   async function storeCovidStatusPositiveLocally() {
     const jsonValue = JSON.stringify({
@@ -85,6 +103,8 @@ export const CovidStatusProvider = ({ children }) => {
         sendCovidStatusPositive,
         getCovidStatus,
         storeCovidStatusPositiveLocally,
+        studentCovidCodes,
+        addStudentCovidCode,
       }}
     >
       {children}

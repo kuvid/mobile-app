@@ -12,23 +12,24 @@ import { manager } from "../bluetooth/BleManager";
 
 import { Icon } from "react-native-elements";
 import StudentListContext from "../context/StudentListContext";
-import AttendanceDataContext from "../context/AttendanceDataContext";
+import CovidStatusContext from "../context/CovidStatusContext";
 import styles from "../styles/Style";
 import { dummyStudentData } from "../dummies/dummyStudentData";
 
 export default function TakeAttendanceScreen() {
   const [deviceNames, setDeviceNames] = useState([]);
 
-  const { sendStudentList, courseName } = useContext(StudentListContext);
-  const { addAttendanceData, attendanceData, printBluetoothData } = useContext(
-    AttendanceDataContext
-  );
+  const { sendStudentList, courseName, addNewStudent, newStudents } =
+    useContext(StudentListContext);
+
+  const { addStudentCovidCode } = useContext(CovidStatusContext);
+
   const [spinnerShown, setSpinnerShown] = useState(true);
   useEffect(() => {
     //sendStudentList();
     const interval = setInterval(() => {
       setSpinnerShown(false);
-    }, 15000);
+    }, 30000);
 
     return () => clearInterval(interval);
   }, []);
@@ -49,7 +50,7 @@ export default function TakeAttendanceScreen() {
 
       return () => subscription.remove();
     });
-  }, [manager]);
+  }, []);
 
   async function attendanceDataListener(error, device) {
     //console.log("startDeviceScan'in içindeyim");
@@ -60,34 +61,58 @@ export default function TakeAttendanceScreen() {
     if (error) {
       // Handle error (scanning will be stopped automatically)
       console.log("scanAndConnect'in içinde error veriyorum");
+      console.log(error);
       return;
     }
     //setDeviceNames(device.name);
     //console.log("device gördüm: " + device.name);
-    if (device.name !== null) {
+    if (device.name !== null && device.name !== "anonymous") {
       //alert(device.name);
       //setDeviceNames([...deviceNames, device.name]);
       //addAttendanceData(device.name);
       console.log("device buldum: " + device.name);
+      //console.log(device);
 
-      addAttendanceData(device.name)
-        .then(() =>
+      addNewStudent(device.name, device.id)
+        /*.then(() =>
           console.log("device buldum contexte ekledim: " + device.name)
-        )
+        )*/
         .then(() => {
           return device.name;
         })
         .catch((error) => console.log(error));
     }
-    console.log("scanAndConnect içindeyiz");
+    //console.log("scanAndConnect içindeyiz");
     // Check if it is a device you are looking for based on advertisement data
     // or other criteria.
-    // if (device.name === "TI BLE Sensor Tag" || device.name === "SensorTag") {
-    //   // Stop scanning as it's not necessary if you are scanning for one device.
-    //manager.stopDeviceScan();
+    if (device.name === "anonymous") {
+      //   // Stop scanning as it's not necessary if you are scanning for one device.
+      //manager.stopDeviceScan();
+      console.log("anonymous device buldum");
+      device
+        .connect()
+        .then((device) => {
+          //console.log(device.discoverAllServicesAndCharacteristics());
+          addStudentCovidCode(device.name, device.id)
+            .then(() =>
+              console.log("anonymous device buldum contexte ekledim:")
+            )
+            .then(() => {
+              return device.name;
+            })
+            .catch((error) => console.log(error));
+          return device.discoverAllServicesAndCharacteristics();
+        })
+        .then((device) => {
+          // Do work on device with services and characteristics
+        })
+        .catch((error) => {
+          // Handle errors
+        });
+    }
     //console.log("stopDeviceScan dedik");
-    if (seconds > 15) {
-      console.log("15 SANİYE GEÇTİİİİİİK");
+    else if (seconds > 30) {
+      console.log("30 SANİYE GEÇTİİİİİİK");
       manager.stopDeviceScan();
     }
     //console.log("5 saniye geçmemiş");
@@ -112,12 +137,12 @@ export default function TakeAttendanceScreen() {
         {deviceNames}
       </Text> */}
       <FlatList
-        data={attendanceData}
+        data={newStudents}
         renderItem={({ item }) => {
           return (
             <TouchableOpacity style={elementStyles.container}>
               <View style={{ flexDirection: "row", alignItems: "stretch" }}>
-                <Text style={styles.boldText}>{item.deviceName}</Text>
+                <Text style={styles.boldText}>{item.studentName}</Text>
 
                 {/* <View style={{ paddingLeft: 18 }}>
                   <Text style={styles.boldText}>{item.student_id}</Text>
@@ -137,7 +162,7 @@ export default function TakeAttendanceScreen() {
       {!spinnerShown ? (
         <View>
           <Text style={[styles.boldText, styles.profileTextTopMargin]}>
-            Attendance data successfully saved for this course!
+            Student list successfully saved for this course!
           </Text>
           <Icon
             iconStyle={{ color: "#94DE45" }}

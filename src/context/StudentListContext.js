@@ -5,11 +5,41 @@ import { dummyStudentData } from "../dummies/dummyStudentData";
 
 const StudentListContext = React.createContext();
 
+var _ = require("lodash");
+
 export const StudentListProvider = ({ children }) => {
   const { idToken, email, name, familyName, idNumber } =
     useContext(AuthContext);
+
   const [studentList, setStudentList] = useState([]);
+
+  const [newStudents, setNewStudents] = useState([]);
+
   const [courseName, setCourseName] = useState("comp130");
+
+  async function addNewStudent(studentName, deviceId) {
+    return new Promise((resolve, reject) => {
+      //here our function should be implemented
+
+      // The `_.property` iteratee shorthand.
+      //_.uniqBy([{ x: 1 }, { x: 2 }, { x: 1 }], "x");
+      // => [{ 'x': 1 }, { 'x': 2 }]
+      //console.log(studentName + deviceId);
+      setNewStudents((prev) =>
+        _.uniqBy(
+          [...prev, { studentName: studentName, deviceId: deviceId }],
+          "studentName"
+        )
+      );
+      console.log(studentName);
+      /*if (!newStudents.includes(studentName)) {
+        console.log("newStudents'a eklicem");
+        setNewStudents((prev) => [...prev, studentName]);
+        console.log("student added to newStudents");
+      }*/
+      resolve();
+    });
+  }
 
   // BU KOD INSTRUCTOR TARAFINDA ÇALIŞACAK, STUDENT LIST CONTEXT GİBİ BİR ŞEY GEREKEBİLİR
   const sendStudentList = async () => {
@@ -72,7 +102,14 @@ export const StudentListProvider = ({ children }) => {
 
   return (
     <StudentListContext.Provider
-      value={{ courseName, studentList, sendStudentList, getStudentList }}
+      value={{
+        courseName,
+        studentList,
+        newStudents,
+        sendStudentList,
+        getStudentList,
+        addNewStudent,
+      }}
     >
       {children}
     </StudentListContext.Provider>

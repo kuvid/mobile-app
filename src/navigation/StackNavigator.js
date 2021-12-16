@@ -11,6 +11,7 @@ import NotificationScreen from "../screens/NotificationScreen";
 import CourseListScreen from "../screens/CourseListScreen";
 import CourseDetailScreen from "../screens/CourseDetailScreen";
 import TakeAttendanceScreen from "../screens/TakeAttendanceScreen";
+import SubmitAttendanceScreen from "../screens/SubmitAttendanceScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -23,6 +24,10 @@ const MainStackNavigator = ({ navigation }) => {
       <Stack.Screen name="CourseList" component={CourseListScreen} />
       <Stack.Screen name="CourseDetail" component={CourseDetailScreen} />
       <Stack.Screen name="TakeAttendance" component={TakeAttendanceScreen} />
+      <Stack.Screen
+        name="SubmitAttendance"
+        component={SubmitAttendanceScreen}
+      />
     </Stack.Navigator>
   );
 };
