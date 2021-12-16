@@ -8,8 +8,8 @@ const AttendanceDataContext = React.createContext();
 export const AttendanceDataProvider = ({ children }) => {
   const { idToken, name, familyName, idNumber } = useContext(AuthContext);
 
-  //const [attendanceData, setAttendanceData] = useState([]);
   const [attendanceData, setAttendanceData] = useState([]);
+
   /*   useEffect(() => {
     pullData();
   }, [idToken]); */
@@ -24,7 +24,7 @@ export const AttendanceDataProvider = ({ children }) => {
     ]);
   }; */
 
-  /*   async function addAttendanceData(deviceName) {
+  async function addAttendanceData(deviceName) {
     return new Promise((resolve, reject) => {
       //here our function should be implemented
       console.log("attendance data eklicem");
@@ -38,17 +38,11 @@ export const AttendanceDataProvider = ({ children }) => {
       console.log("attendance data added");
       resolve();
     });
-  } */
+  }
 
-  /*async function addAttendanceData(deviceName) {
-    return new Promise((resolve, reject) => {
-      //here our function should be implemented
-      console.log("attendance data eklicem");
-      setAttendanceData([attendanceData.add(deviceName)]);
-      console.log("attendance data added");
-      resolve();
-    });
-  }*/
+  const printBluetoothData = () => {
+    return attendanceData;
+  };
 
   const cleanData = () => {
     setAttendanceData([]);
@@ -110,6 +104,8 @@ export const AttendanceDataProvider = ({ children }) => {
     <AttendanceDataContext.Provider
       value={{
         attendanceData,
+        addAttendanceData,
+        printBluetoothData,
         pullData,
         cleanData,
       }}

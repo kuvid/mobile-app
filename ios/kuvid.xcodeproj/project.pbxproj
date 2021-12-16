@@ -411,7 +411,6 @@
 				CODE_SIGN_ENTITLEMENTS = kuvid/app.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = HTTY2STDC8;
-				ENABLE_BITCODE = YES;
 				INFOPLIST_FILE = kuvid/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";

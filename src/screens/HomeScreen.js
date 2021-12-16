@@ -106,7 +106,7 @@ function HomeScreen({ navigation }) {
               isCovidPositive ? styles.inactiveButton : styles.lightPurpleButton
             }
             onPress={() => {
-              if (group === "Student") navigation.navigate("SubmitAttendance");
+              if (group === "Student") addAttendanceData();
               //if (group === "Student") sendStudentList();
               // burası silincek
               //else sendStudentList();
@@ -152,8 +152,7 @@ function HomeScreen({ navigation }) {
         <TouchableOpacity
           style={isCovidPositive ? styles.inactiveButton : styles.purpleButton}
           onPress={storeCovidStatusPositiveLocally}
-          //disabled={isCovidPositive}
-          disabled={true}
+          disabled={isCovidPositive}
         >
           <Icon
             iconStyle={isCovidPositive ? styles.inactiveIcon : styles.whiteIcon}
