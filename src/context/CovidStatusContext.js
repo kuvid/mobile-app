@@ -79,10 +79,10 @@ export const CovidStatusProvider = ({ children }) => {
         //console.log(covidStatus + ": covid status updated");
       })
       .then(() => {
-        console.log("contacts array" + contactsArray);
+        //console.log("contacts array" + contactsArray);
       })
       .catch((error) => {
-        console.log("axios hatası");
+        //console.log("axios hatası");
         console.log(error);
       });
 
@@ -208,7 +208,7 @@ export const CovidStatusProvider = ({ children }) => {
 
           const newCovidCode = await produceCovidCode();
           const jsonValue = JSON.stringify({
-            covid_code: "123",
+            covid_code: newCovidCode,
             covid_status: "Negative",
             update_date: Date.now(),
           });
@@ -232,7 +232,7 @@ export const CovidStatusProvider = ({ children }) => {
                 console.log(error);
               }
             );
-            console.log("your previous codes: " + covidCodesArray.toString());
+            //console.log("your previous codes: " + covidCodesArray.toString());
           } catch (e) {
             console.log(e);
           }
@@ -313,6 +313,7 @@ export const CovidStatusProvider = ({ children }) => {
         sendCovidStatusPositive,
         getCovidStatus,
         storeCovidStatusPositiveLocally,
+        storeCovidStatusNegativeLocally,
         studentCovidCodes,
         addStudentCovidCode,
         checkIfContacted,

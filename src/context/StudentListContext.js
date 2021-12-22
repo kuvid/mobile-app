@@ -14,8 +14,10 @@ export const StudentListProvider = ({ children }) => {
   const [studentList, setStudentList] = useState([]);
 
   const [newStudents, setNewStudents] = useState([
-    "KUvid Selin Nur Öztürk 60160",
+    { studentName: "KUvid Selin Öztürk 60160", deviceId: "12345" },
   ]);
+
+  const [registeredStudents, setRegisteredStudents] = useState([]);
 
   const [courseName, setCourseName] = useState("comp130");
 
@@ -25,47 +27,50 @@ export const StudentListProvider = ({ children }) => {
 
   async function addNewStudent(studentName, deviceId) {
     return new Promise((resolve, reject) => {
-      //here our function should be implemented
-
-      // The `_.property` iteratee shorthand.
-      //_.uniqBy([{ x: 1 }, { x: 2 }, { x: 1 }], "x");
-      // => [{ 'x': 1 }, { 'x': 2 }]
-      //console.log(studentName + deviceId);
       setNewStudents((prev) =>
         _.uniqBy(
           [...prev, { studentName: studentName, deviceId: deviceId }],
           "studentName"
         )
       );
-      console.log(studentName);
-      /*if (!newStudents.includes(studentName)) {
-        console.log("newStudents'a eklicem");
-        setNewStudents((prev) => [...prev, studentName]);
-        console.log("student added to newStudents");
-      }*/
-      resolve();
-    });
-  }
 
-  const arrangeStudentNames = async () => {
-    for (var i = 0; i < newStudents.length; i++) {
-      const myArray = newStudents[i].split(" ");
+      // bu kısım test edilmedi
+      const myArray = studentName.split(" ");
       const student_id = myArray.pop();
-      //const familyName = myArray.pop();
-      console.log(student_id);
-      //console.log(familyName);
       myArray.reverse();
       myArray.pop(); // pop KUvid
       myArray.reverse();
-      console.log(myArray);
       var student_name = myArray.join(" ");
-      console.log(student_name);
       var student = {
         student_name: student_name,
         student_id: student_id,
       };
+      setRegisteredStudents((prev) => _uniqBy([...prev, student], student_id));
+      resolve();
+    });
+  }
+
+  // bu fonksiyon şu an sadece test amaçlı burda
+  const arrangeStudentNames = async () => {
+    for (var i = 0; i < newStudents.length; i++) {
+      const myArray = newStudents[i].studentName.split(" ");
+      const student_id = myArray.pop();
+      //const familyName = myArray.pop();
+      //console.log(student_id);
+      //console.log(familyName);
+      myArray.reverse();
+      myArray.pop(); // pop KUvid
+      myArray.reverse();
+      //console.log(myArray);
+      var student_name = myArray.join(" ");
+      //console.log(student_name);
+      var student = {
+        student_name: student_name,
+        student_id: student_id,
+      };
+      setRegisteredStudents((prev) => [...registeredStudents, student]);
       //await setStudentList((prev) => [...studentList, student]);
-      //console.log(studentList);
+      console.log(student);
     }
   };
 
@@ -84,7 +89,7 @@ export const StudentListProvider = ({ children }) => {
               instructor_id: parseInt(`${idNumber}`),
               instructor_name: `${name} ${familyName}`,
               instructor_email: `${email}`,
-              students: dummyStudentData,
+              students: registeredStudents,
             },
           },
         },
@@ -134,6 +139,7 @@ export const StudentListProvider = ({ children }) => {
         courseName,
         studentList,
         newStudents,
+        registeredStudents,
         sendStudentList,
         getStudentList,
         addNewStudent,

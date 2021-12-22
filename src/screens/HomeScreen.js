@@ -5,6 +5,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Image,
+  Modal,
 } from "react-native";
 import { Icon } from "react-native-elements";
 import styles from "../styles/Style";
@@ -27,12 +28,15 @@ function HomeScreen({ navigation }) {
     sendCovidStatusPositive,
     getCovidStatus,
     storeCovidStatusPositiveLocally,
+    storeCovidStatusNegativeLocally,
     contacted,
   } = useContext(CovidStatusContext);
 
   var [isCovidPositive, setIsCovidPositive] = useState(
     covidStatus === "Positive"
   );
+
+  const [modalVisible, setModalVisible] = useState(false);
 
   //console.log(covidStatus);
 
@@ -42,6 +46,46 @@ function HomeScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <Text style={styles.purpleButtonText}>
+              After this action, you won’t be able to enter the campus until you
+              send your negative COVID-19 test to the Health Center. Would you
+              like to continue?
+            </Text>
+
+            <View style={styles.row}>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={styles.redButton}
+                  onPress={() => setModalVisible(!modalVisible)}
+                >
+                  <Text style={styles.whiteButtonText}>NO</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={styles.buttonContainer}>
+                <TouchableOpacity
+                  style={styles.greenButton}
+                  onPress={() => {
+                    setModalVisible(!modalVisible);
+                    storeCovidStatusPositiveLocally();
+                  }}
+                >
+                  <Text style={styles.whiteButtonText}>YES</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          </View>
+        </View>
+      </Modal>
       <View
         style={{
           display: "flex",
@@ -49,34 +93,32 @@ function HomeScreen({ navigation }) {
           justifyContent: "space-between",
         }}
       >
-        {contacted ? (
-          <View style={{ flexDirection: "row", alignItems: "center" }}>
-            <TouchableOpacity
-              style={{
-                alignSelf: "flex-start",
-                paddingLeft: 18,
-                paddingTop: 18,
-              }}
-            >
-              <Icon
-                name="account-switch"
-                type="material-community"
-                size={36}
-                iconStyle={{ color: "#EF4836" }}
-              />
-            </TouchableOpacity>
-            <Text
-              style={{
-                paddingLeft: 18,
-                paddingTop: 18,
-                color: "#2C2C2C",
-                fontWeight: "bold",
-              }}
-            >
-              CLOSE CONTACT!
-            </Text>
-          </View>
-        ) : null}
+        <View style={{ flexDirection: "row", alignItems: "center" }}>
+          <TouchableOpacity
+            style={{
+              alignSelf: "flex-start",
+              paddingLeft: 18,
+              paddingTop: 18,
+            }}
+          >
+            <Icon
+              name="account-switch"
+              type="material-community"
+              size={36}
+              iconStyle={contacted ? styles.allRed : styles.allWhite}
+            />
+          </TouchableOpacity>
+          <Text
+            style={
+              contacted
+                ? styles.closeContactTextVisible
+                : styles.closeContactTextHidden
+            }
+          >
+            CLOSE CONTACT!
+          </Text>
+        </View>
+
         <TouchableOpacity
           onPress={() => navigation.navigate("Notifications")}
           style={{ alignSelf: "flex-end", paddingRight: 18, paddingTop: 18 }}
@@ -189,7 +231,7 @@ function HomeScreen({ navigation }) {
       <View>
         <TouchableOpacity
           style={isCovidPositive ? styles.inactiveButton : styles.purpleButton}
-          onPress={storeCovidStatusPositiveLocally}
+          onPress={() => setModalVisible(true)}
           disabled={isCovidPositive}
           //disabled={true}
         >

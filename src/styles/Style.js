@@ -107,6 +107,44 @@ const styles = StyleSheet.create({
     alignItems: "center",
     //justifyContent: "space-between",
   },
+  centeredView: {
+    flex: 1,
+    justifyContent: "flex-end",
+    backgroundColor: "rgba(46, 20, 131, 0.69)",
+  },
+  modalView: {
+    margin: 18,
+    backgroundColor: "white",
+    borderRadius: 10,
+    padding: 35,
+    alignItems: "center",
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  allWhite: {
+    color: "white",
+  },
+  allRed: {
+    color: "#EF4836",
+  },
+  closeContactTextVisible: {
+    paddingLeft: 18,
+    paddingTop: 18,
+    color: "#2C2C2C",
+    fontWeight: "bold",
+  },
+  closeContactTextHidden: {
+    paddingLeft: 18,
+    paddingTop: 18,
+    color: "white",
+    fontWeight: "bold",
+  },
 });
 
 export default styles;

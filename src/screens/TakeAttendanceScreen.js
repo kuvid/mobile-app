@@ -19,8 +19,13 @@ import { dummyStudentData } from "../dummies/dummyStudentData";
 export default function TakeAttendanceScreen() {
   const [deviceNames, setDeviceNames] = useState([]);
 
-  const { sendStudentList, courseName, addNewStudent, newStudents } =
-    useContext(StudentListContext);
+  const {
+    sendStudentList,
+    courseName,
+    addNewStudent,
+    newStudents,
+    registeredStudents,
+  } = useContext(StudentListContext);
 
   const { addStudentCovidCode } = useContext(CovidStatusContext);
 
@@ -180,16 +185,16 @@ export default function TakeAttendanceScreen() {
         {deviceNames}
       </Text> */}
       <FlatList
-        data={newStudents}
+        data={registeredStudents}
         renderItem={({ item }) => {
           return (
             <TouchableOpacity style={elementStyles.container}>
               <View style={{ flexDirection: "row", alignItems: "stretch" }}>
-                <Text style={styles.boldText}>{item.studentName}</Text>
+                <Text style={styles.boldText}>{item.student_name}</Text>
 
-                {/* <View style={{ paddingLeft: 18 }}>
+                <View style={{ paddingLeft: 18 }}>
                   <Text style={styles.boldText}>{item.student_id}</Text>
-                </View> */}
+                </View>
               </View>
             </TouchableOpacity>
           );
