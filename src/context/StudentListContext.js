@@ -13,9 +13,15 @@ export const StudentListProvider = ({ children }) => {
 
   const [studentList, setStudentList] = useState([]);
 
-  const [newStudents, setNewStudents] = useState([]);
+  const [newStudents, setNewStudents] = useState([
+    "KUvid Selin Nur Öztürk 60160",
+  ]);
 
   const [courseName, setCourseName] = useState("comp130");
+
+  useEffect(() => {
+    arrangeStudentNames();
+  }, []);
 
   async function addNewStudent(studentName, deviceId) {
     return new Promise((resolve, reject) => {
@@ -40,6 +46,28 @@ export const StudentListProvider = ({ children }) => {
       resolve();
     });
   }
+
+  const arrangeStudentNames = async () => {
+    for (var i = 0; i < newStudents.length; i++) {
+      const myArray = newStudents[i].split(" ");
+      const student_id = myArray.pop();
+      //const familyName = myArray.pop();
+      console.log(student_id);
+      //console.log(familyName);
+      myArray.reverse();
+      myArray.pop(); // pop KUvid
+      myArray.reverse();
+      console.log(myArray);
+      var student_name = myArray.join(" ");
+      console.log(student_name);
+      var student = {
+        student_name: student_name,
+        student_id: student_id,
+      };
+      //await setStudentList((prev) => [...studentList, student]);
+      //console.log(studentList);
+    }
+  };
 
   // BU KOD INSTRUCTOR TARAFINDA ÇALIŞACAK, STUDENT LIST CONTEXT GİBİ BİR ŞEY GEREKEBİLİR
   const sendStudentList = async () => {

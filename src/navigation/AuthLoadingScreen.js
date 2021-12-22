@@ -14,7 +14,7 @@ export default function AuthLoadingScreen() {
   const { token, loading, loadApp, group } = useContext(AuthContext);
   const { pullData, cleanData } = useContext(AttendanceDataContext);
   const { getStudentList } = useContext(StudentListContext);
-  const { getCovidStatus } = useContext(CovidStatusContext);
+  const { getCovidStatus, checkIfContacted } = useContext(CovidStatusContext);
 
   useEffect(() => {
     cleanData();
@@ -22,6 +22,7 @@ export default function AuthLoadingScreen() {
   }, []);
 
   useEffect(() => {
+    checkIfContacted();
     getCovidStatus();
     if (group === "Student") pullData();
     else {

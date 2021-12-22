@@ -97,6 +97,16 @@ const styles = StyleSheet.create({
     color: "white",
     marginLeft: 18,
   },
+  homeScreenTopRow: {
+    backgroundColor: "black",
+    paddingHorizontal: 18,
+    paddingVertical: 12,
+    //backgroundColor: "white",
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    //justifyContent: "space-between",
+  },
 });
 
 export default styles;

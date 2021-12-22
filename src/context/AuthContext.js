@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Auth from "@aws-amplify/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const AuthContext = React.createContext();
 
@@ -13,6 +14,9 @@ export const AuthProvider = ({ children }) => {
   const [familyName, setFamilyName] = useState("");
   const [idNumber, setIdNumber] = useState("");
   const [group, setGroup] = useState("");
+  const [signedOut, setSignedOut] = useState(false);
+
+  useEffect(() => {}, [signedOut]);
 
   const loadApp = async () => {
     await Auth.currentAuthenticatedUser()
@@ -26,9 +30,13 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signOut = async () => {
-    await Auth.signOut().catch((err) => {
-      console.log("ERROR: ", err);
-    });
+    await Auth.signOut()
+      .then(() => {
+        setSignedOut(true);
+      })
+      .catch((err) => {
+        console.log("ERROR: ", err);
+      });
     setToken("");
     setIdToken("");
     setUsername("");

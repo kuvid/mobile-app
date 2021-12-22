@@ -6,6 +6,7 @@ import { AttendanceDataProvider } from "./src/context/AttendanceDataContext";
 import { AuthProvider } from "./src/context/AuthContext";
 import { CovidStatusProvider } from "./src/context/CovidStatusContext";
 import { StudentListProvider } from "./src/context/StudentListContext";
+import { NotificationProvider } from "./src/context/NotificationContext";
 
 Amplify.configure(awsConfig);
 
@@ -17,7 +18,9 @@ export default function App() {
       <AttendanceDataProvider>
         <StudentListProvider>
           <CovidStatusProvider>
-            <AuthLoadingScreen />
+            <NotificationProvider>
+              <AuthLoadingScreen />
+            </NotificationProvider>
           </CovidStatusProvider>
         </StudentListProvider>
       </AttendanceDataProvider>

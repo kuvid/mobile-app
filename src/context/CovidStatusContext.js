@@ -17,6 +17,8 @@ export const CovidStatusProvider = ({ children }) => {
   const [covidStatus, setCovidStatus] = useState("");
   const [currentCovidCode, setCurrentCovidCode] = useState("");
 
+  const [contacted, setContacted] = useState(false);
+
   const [studentCovidCodes, setStudentCovidCodes] = useState([]);
 
   const [serviceUuid1, setServiceUuid1] = useState("");
@@ -25,7 +27,7 @@ export const CovidStatusProvider = ({ children }) => {
   const [charUuid2, setCharUuid2] = useState("");
 
   const [charUuid, setCharUuid] = useState("");
-  const [serviceUuid, setServiceUuid] = useState("");
+  // const [serviceUuid, setServiceUuid] = useState("");
 
   useEffect(() => {
     // UUIDGenerator.getRandomUUID().then((uuid) => {
@@ -43,6 +45,7 @@ export const CovidStatusProvider = ({ children }) => {
     //cleanAsyncStorages();
     produceCharUuid();
     getCurrentCovidCode();
+
     //storeCovidStatusNegativeLocally();
   }, []);
 
@@ -52,6 +55,43 @@ export const CovidStatusProvider = ({ children }) => {
     } catch (e) {
       // clear error
     }
+  }
+
+  async function checkIfContacted() {
+    const contactsArray = []; // axios'tan array çekicezz
+
+    await axios
+      .get(
+        "https://3mc5pe0gw4.execute-api.eu-central-1.amazonaws.com/Production/kuvid_get_positive_codes",
+
+        {
+          headers: {
+            Authorization: `Bearer ${idToken}` /* this is the JWT token from AWS Cognito. */,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        //console.log(response.data);
+        response.data.forEach((element) => {
+          contactsArray.push(element);
+        });
+        //console.log(covidStatus + ": covid status updated");
+      })
+      .then(() => {
+        console.log("contacts array" + contactsArray);
+      })
+      .catch((error) => {
+        console.log("axios hatası");
+        console.log(error);
+      });
+
+    const storedCovidCodes = await AsyncStorage.getItem(COVID_CODES);
+    const localCovidCodesArray = JSON.parse(storedCovidCodes);
+
+    const found = localCovidCodesArray.some((r) => contactsArray.includes(r)); // boolean
+    //if (found) console.log("MATCH BULDUM!");
+    setContacted(found);
   }
 
   async function addStudentCovidCode(covidCode, deviceId) {
@@ -140,7 +180,7 @@ export const CovidStatusProvider = ({ children }) => {
             newCovidCode
         );
         setCurrentCovidCode(newCovidCode);
-      } else {
+      } else if (covidStatus === "Negative") {
         // not first time, there is data in local storage
 
         const covidCodeProductionDate =
@@ -168,7 +208,7 @@ export const CovidStatusProvider = ({ children }) => {
 
           const newCovidCode = await produceCovidCode();
           const jsonValue = JSON.stringify({
-            covid_code: `${newCovidCode}`,
+            covid_code: "123",
             covid_status: "Negative",
             update_date: Date.now(),
           });
@@ -185,6 +225,7 @@ export const CovidStatusProvider = ({ children }) => {
 
             const covidCodesArray = JSON.parse(storedCovidCodes);
             covidCodesArray.push(newCovidCode);
+            if (covidCodesArray.length >= 15) covidCodesArray.shift();
             const arrayJson = JSON.stringify(covidCodesArray);
             await AsyncStorage.setItem(COVID_CODES, arrayJson).catch(
               (error) => {
@@ -196,7 +237,7 @@ export const CovidStatusProvider = ({ children }) => {
             console.log(e);
           }
           console.log(
-            "more than one minute has passed... your new unique covid code is " +
+            "more than one minute has passed.... your new unique covid code is " +
               newCovidCode
           );
         }
@@ -239,8 +280,8 @@ export const CovidStatusProvider = ({ children }) => {
       .post(
         "https://3mc5pe0gw4.execute-api.eu-central-1.amazonaws.com/Production/covid_status",
         {
-          covid_code: "123",
-          covid_status: "Negative",
+          covid_code: `${currentCovidCode}`,
+          covid_status: "Positive",
           update_date: Date.now(),
         },
         {
@@ -274,6 +315,8 @@ export const CovidStatusProvider = ({ children }) => {
         storeCovidStatusPositiveLocally,
         studentCovidCodes,
         addStudentCovidCode,
+        checkIfContacted,
+        contacted,
       }}
     >
       {children}

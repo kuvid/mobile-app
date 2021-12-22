@@ -27,6 +27,7 @@ function HomeScreen({ navigation }) {
     sendCovidStatusPositive,
     getCovidStatus,
     storeCovidStatusPositiveLocally,
+    contacted,
   } = useContext(CovidStatusContext);
 
   var [isCovidPositive, setIsCovidPositive] = useState(
@@ -41,17 +42,54 @@ function HomeScreen({ navigation }) {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TouchableOpacity
-        onPress={() => navigation.navigate("Notifications")}
-        style={{ alignSelf: "flex-end", paddingRight: 18, paddingTop: 18 }}
+      <View
+        style={{
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "space-between",
+        }}
       >
-        <Icon
-          name="bell"
-          type="material-community"
-          size={24}
-          iconStyle={{ color: "#7719B2" }}
-        />
-      </TouchableOpacity>
+        {contacted ? (
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <TouchableOpacity
+              style={{
+                alignSelf: "flex-start",
+                paddingLeft: 18,
+                paddingTop: 18,
+              }}
+            >
+              <Icon
+                name="account-switch"
+                type="material-community"
+                size={36}
+                iconStyle={{ color: "#EF4836" }}
+              />
+            </TouchableOpacity>
+            <Text
+              style={{
+                paddingLeft: 18,
+                paddingTop: 18,
+                color: "#2C2C2C",
+                fontWeight: "bold",
+              }}
+            >
+              CLOSE CONTACT!
+            </Text>
+          </View>
+        ) : null}
+        <TouchableOpacity
+          onPress={() => navigation.navigate("Notifications")}
+          style={{ alignSelf: "flex-end", paddingRight: 18, paddingTop: 18 }}
+        >
+          <Icon
+            name="bell"
+            type="material-community"
+            size={36}
+            iconStyle={{ color: "#7719B2" }}
+          />
+        </TouchableOpacity>
+      </View>
+
       <View style={styles.profileContainer}>
         {group === "Student" ? (
           <Image
