@@ -12,6 +12,8 @@ import CourseListScreen from "../screens/CourseListScreen";
 import CourseDetailScreen from "../screens/CourseDetailScreen";
 import TakeAttendanceScreen from "../screens/TakeAttendanceScreen";
 import SubmitAttendanceScreen from "../screens/SubmitAttendanceScreen";
+import SubmitCovidCodeScreen from "../screens/SubmitCovidCodeScreen";
+import RegisterScreen from "../screens/RegisterScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +30,8 @@ const MainStackNavigator = ({ navigation }) => {
         name="SubmitAttendance"
         component={SubmitAttendanceScreen}
       />
+      <Stack.Screen name="SubmitCovidCode" component={SubmitCovidCodeScreen} />
+      <Stack.Screen name="Register" component={RegisterScreen} />
     </Stack.Navigator>
   );
 };

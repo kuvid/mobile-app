@@ -3,63 +3,53 @@ import { View, Text, SafeAreaView, ActivityIndicator } from "react-native";
 import { Icon } from "react-native-elements";
 import styles from "../styles/Style";
 import CovidStatusContext from "../context/CovidStatusContext";
+import AuthContext from "../context/AuthContext";
 
 import Peripheral, { Service, Characteristic } from "react-native-peripheral";
 import { Platform } from "react-native";
 
 import BLEAdvertiser from "react-native-ble-advertiser";
 
-export default function SubmitAttendanceScreen({ navigation }) {
+export default function RegisterScreen({ navigation }) {
   const [spinnerShown, setSpinnerShown] = useState(true);
   const [message, setMessage] = useState("");
 
-  const { serviceUuid1, charUuid1, serviceUuid2, charUuid2 } =
-    useContext(CovidStatusContext);
+  const { currentCovidCode, charUuid } = useContext(CovidStatusContext);
+
+  const { name, familyName, idNumber } = useContext(AuthContext);
 
   useEffect(() => {
     if (Platform.OS === "ios") {
       Peripheral.onStateChanged((state) => {
         // wait until Bluetooth is ready
 
-        var ch1, service1, ch2, service2;
+        var ch1, service1;
 
         if (state === "poweredOn") {
           // first, define a characteristic with a value
           Peripheral.removeAllServices()
             .then(() => {
               ch1 = new Characteristic({
-                uuid: charUuid1,
+                uuid: `${charUuid}`,
                 value: "c2VsaW4=", // Base64-encoded string
-                properties: ["read", "write"],
-                permissions: ["readable", "writeable"],
-              });
-              ch2 = new Characteristic({
-                uuid: charUuid2,
-                value: "c2VsaW4=",
                 properties: ["read", "write"],
                 permissions: ["readable", "writeable"],
               });
             })
             .then(() => {
               service1 = new Service({
-                uuid: serviceUuid1,
+                uuid: `${currentCovidCode}`,
                 characteristics: [ch1],
-              });
-              service2 = new Service({
-                uuid: serviceUuid2,
-                characteristics: [ch2],
               });
             })
             .then(() => {
               Peripheral.addService(service1)
-                .then(() => {
-                  Peripheral.addService(service2);
-                })
                 .then(() =>
                   // start advertising to make your device discoverable
                   Peripheral.startAdvertising({
-                    name: "Student",
-                    serviceUuids: [serviceUuid1, serviceUuid2],
+                    name: `KUvid ${name} ${familyName} ${idNumber}`,
+                    //name: "KUvid",
+                    serviceUuids: [currentCovidCode],
                   })
                 )
                 .then(() => {
@@ -84,12 +74,8 @@ export default function SubmitAttendanceScreen({ navigation }) {
         }
       });
     } else if (Platform.OS === "android") {
-      BLEAdvertiser.setCompanyId(0x00); // Your Company's Code
-      BLEAdvertiser.broadcast(
-        ["ebed0e09-033a-4bfe-8dcc-20a04fad944e"],
-        [[1, 0]],
-        {}
-      ) // The service UUID and additional manufacturer data.
+      BLEAdvertiser.setCompanyId(0x00);
+      BLEAdvertiser.broadcast([currentCovidCode], [[1, 0]], {})
         .then((success) => {
           console.log("Broadcasting Sucessful", success);
           setTimeout(() => {

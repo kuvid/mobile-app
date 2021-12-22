@@ -25,6 +25,7 @@ export default function TakeAttendanceScreen() {
   const { addStudentCovidCode } = useContext(CovidStatusContext);
 
   const [spinnerShown, setSpinnerShown] = useState(true);
+
   useEffect(() => {
     //sendStudentList();
     const interval = setInterval(() => {
@@ -33,13 +34,14 @@ export default function TakeAttendanceScreen() {
 
     return () => clearInterval(interval);
   }, []);
+
   let startTime = new Date();
   useEffect(() => {
     manager.onStateChange((state) => {
       const subscription = manager.onStateChange((state) => {
         if (state === "PoweredOn") {
           scanAndConnect();
-
+          subscription.remove();
           //scanAndConnect(counter);
           //console.log("scanAndConnect'ten çıktık");
           //alert("bişiler oluyo");
@@ -65,55 +67,96 @@ export default function TakeAttendanceScreen() {
       return;
     }
     //setDeviceNames(device.name);
-    //console.log("device gördüm: " + device.name);
-    if (device.name !== null && device.name !== "anonymous") {
+    console.log("device gördüm: " + device.name);
+    if (device.name !== null && device.name.includes("KUvid")) {
       //alert(device.name);
       //setDeviceNames([...deviceNames, device.name]);
       //addAttendanceData(device.name);
-      console.log("device buldum: " + device.name);
+      console.log("KUvid buldum: " + device.name);
+      manager.stopDeviceScan();
       //console.log(device);
 
-      addNewStudent(device.name, device.id)
-        /*.then(() =>
-          console.log("device buldum contexte ekledim: " + device.name)
-        )*/
-        .then(() => {
-          return device.name;
+      // await device.connect();
+      // await device.discoverAllServicesAndCharacteristics();
+      // const services = await device.services();
+      // const characteristicForOneService = await services[0].characteristics();
+      // console.log(characteristicForOneService);
+      device
+        .connect()
+        .then((device) => {
+          return device.discoverAllServicesAndCharacteristics();
+          //     // addStudentCovidCode(device.name, device.id)
         })
-        .catch((error) => console.log(error));
+        .then((device) => {
+          return device.services();
+        })
+        .then((services) => {
+          services.forEach((element) => {
+            console.log(element);
+          });
+        });
+      //     //     console.log("anonymous device buldum contexte ekledim:")
+      //     //   )
+      //     //   .then(() => {
+      //     //     return device.name;
+      //     //   })
+      //     //   .catch((error) => console.log(error));
+      //     // return device.discoverAllServicesAndCharacteristics();
+      //   })
+      //   .then((device) => {
+      //     // Do work on device with services and characteristics
+      //     console.log("device discover ettik");
+      //     const services = device.services();
+      //     console.log(services);
+      //   })
+      //   .catch((error) => {
+      //     // Handle errors
+      //     console.log("hata veriyorum: " + error);
+      //   });
+
+      // addNewStudent(device.name, device.id)
+      //   /*.then(() =>
+      //     console.log("device buldum contexte ekledim: " + device.name)
+      //   )*/
+      //   .then(() => {
+      //     return device.name;
+      //   })
+      //   .catch((error) => console.log(error));
     }
     //console.log("scanAndConnect içindeyiz");
     // Check if it is a device you are looking for based on advertisement data
     // or other criteria.
-    if (device.name === "anonymous") {
-      //   // Stop scanning as it's not necessary if you are scanning for one device.
-      //manager.stopDeviceScan();
-      console.log("anonymous device buldum");
-      device
-        .connect()
-        .then((device) => {
-          //console.log(device.discoverAllServicesAndCharacteristics());
-          addStudentCovidCode(device.name, device.id)
-            .then(() =>
-              console.log("anonymous device buldum contexte ekledim:")
-            )
-            .then(() => {
-              return device.name;
-            })
-            .catch((error) => console.log(error));
-          return device.discoverAllServicesAndCharacteristics();
-        })
-        .then((device) => {
-          // Do work on device with services and characteristics
-        })
-        .catch((error) => {
-          // Handle errors
-        });
-    }
+    // if (device.name === "Anonymous") {
+    //   //   // Stop scanning as it's not necessary if you are scanning for one device.
+    //   //manager.stopDeviceScan();
+    //   console.log("anonymous device buldum");
+    //   device
+    //     .connect()
+    //     .then((device) => {
+    //       //console.log(device.discoverAllServicesAndCharacteristics());
+    //       addStudentCovidCode(device.name, device.id)
+    //         .then(() =>
+    //           console.log("anonymous device buldum contexte ekledim:")
+    //         )
+    //         .then(() => {
+    //           return device.name;
+    //         })
+    //         .catch((error) => console.log(error));
+    //       return device.discoverAllServicesAndCharacteristics();
+    //     })
+    //     .then((device) => {
+    //       // Do work on device with services and characteristics
+    //     })
+    //     .catch((error) => {
+    //       // Handle errors
+    //     });
+    // }
     //console.log("stopDeviceScan dedik");
     else if (seconds > 30) {
       console.log("30 SANİYE GEÇTİİİİİİK");
       manager.stopDeviceScan();
+    } else {
+      console.log("unknown device found");
     }
     //console.log("5 saniye geçmemiş");
     //   // Proceed with connection.
