@@ -11,10 +11,8 @@ export default function ProfileScreen() {
   return (
     <SafeAreaView style={styles.container}>
       <View>
-        <TouchableOpacity style={styles.redButton}>
-          <Text style={styles.whiteButtonText} onPress={signOut}>
-            LOG OUT
-          </Text>
+        <TouchableOpacity style={styles.redButton} onPress={signOut}>
+          <Text style={styles.whiteButtonText}>LOG OUT</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>

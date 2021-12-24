@@ -1,33 +1,33 @@
-import React from 'react';
-import { StyleSheet } from 'react-native';
+import React from "react";
+import { StyleSheet } from "react-native";
 
 const globalBorderRadius = 10;
 
 const components = StyleSheet.create({
-    button: {
-        borderRadius: globalBorderRadius,
-        paddingVertical: 20,
-        margin: 18,
-        alignItems: 'center',
-    },
-    boldText: {
-        fontWeight: 'bold',
-        fontSize: 16,
-    },
-    regularText: {
-        fontWeight: 'normal',
-        fontSize: 12,
-    },
-    icon: {
-        marginBottom: 16
-    },
-    input: {
-        padding: 10,
-        borderRadius: globalBorderRadius,
-        paddingVertical: 20,
-        margin: 18,
-        backgroundColor: 'white'
-    }
+  button: {
+    borderRadius: globalBorderRadius,
+    paddingVertical: 20,
+    margin: 18,
+    alignItems: "center",
+  },
+  boldText: {
+    fontWeight: "bold",
+    fontSize: 20,
+  },
+  regularText: {
+    fontWeight: "normal",
+    fontSize: 12,
+  },
+  icon: {
+    marginBottom: 16,
+  },
+  input: {
+    padding: 10,
+    borderRadius: globalBorderRadius,
+    paddingVertical: 20,
+    margin: 18,
+    backgroundColor: "white",
+  },
 });
 
 export default components;

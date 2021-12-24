@@ -22,6 +22,7 @@ export const AuthProvider = ({ children }) => {
     await Auth.currentAuthenticatedUser()
       .then((user) => {
         signIn(user);
+        setSignedOut(false);
       })
       .catch(() => {
         console.log("err signing in");
@@ -30,13 +31,20 @@ export const AuthProvider = ({ children }) => {
   };
 
   const signOut = async () => {
-    await Auth.signOut()
-      .then(() => {
-        setSignedOut(true);
-      })
-      .catch((err) => {
-        console.log("ERROR: ", err);
-      });
+    try {
+      await Auth.signOut();
+      setSignedOut(true);
+      console.log("trying to sign out...");
+    } catch (error) {
+      console.log("ERROR LOGGING OUT: ", err);
+    }
+    // await Auth.signOut()
+    //   .then(() => {
+    //     setSignedOut(true);
+    //   })
+    //   .catch((err) => {
+    //     console.log("ERROR: ", err);
+    //   });
     setToken("");
     setIdToken("");
     setUsername("");

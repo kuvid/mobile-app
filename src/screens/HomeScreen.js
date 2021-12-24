@@ -135,7 +135,7 @@ function HomeScreen({ navigation }) {
       <View style={styles.profileContainer}>
         {group === "Student" ? (
           <Image
-            source={require("../images/girl.png")}
+            source={require("../images/user.png")}
             style={styles.profileImage}
           />
         ) : (

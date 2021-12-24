@@ -13,7 +13,10 @@ export const CovidStatusProvider = ({ children }) => {
   const COVID_STATUS = "@save_covid_status";
   const COVID_CODES = "@covid_codes";
 
-  const { idToken } = useContext(AuthContext);
+  const LOCAL_DEVICE_STATUS = "@local_device_status";
+  const DB_DEVICE_STATUS = "@db_device_status";
+
+  const { idToken, idNumber } = useContext(AuthContext);
   const [covidStatus, setCovidStatus] = useState("");
   const [currentCovidCode, setCurrentCovidCode] = useState("");
 
@@ -43,15 +46,72 @@ export const CovidStatusProvider = ({ children }) => {
     //   setCharUuid2(uuid);
     // });
     //cleanAsyncStorages();
-    produceCharUuid();
     getCurrentCovidCode();
-
+    produceCharUuid();
+    ///getDbDeviceStatus();
+    checkDeviceStatus();
     //storeCovidStatusNegativeLocally();
   }, []);
 
+  async function initializeLocalDeviceStatus() {
+    await AsyncStorage.setItem(LOCAL_DEVICE_STATUS, "123").catch((error) => {
+      console.log(error);
+    });
+  }
+
+  async function checkDeviceStatus() {
+    const localDeviceStatus = await AsyncStorage.getItem(LOCAL_DEVICE_STATUS);
+    const dbDeviceStatus = await AsyncStorage.getItem(DB_DEVICE_STATUS);
+    console.log("localDeviceStatus: " + localDeviceStatus);
+    console.log("dbDeviceStatus: " + dbDeviceStatus);
+    if (localDeviceStatus !== dbDeviceStatus) {
+      setCovidStatus("Negative");
+      storeCovidStatusNegativeLocally();
+    } else {
+      console.log("kodlar aynı");
+    }
+  }
+
+  async function getDbDeviceStatus() {
+    await axios
+      .get(
+        "https://3mc5pe0gw4.execute-api.eu-central-1.amazonaws.com/Production/kuvidGetDeviceStatus",
+
+        {
+          params: {
+            student_id: `${idNumber}`,
+          },
+          headers: {
+            Authorization: `Bearer ${idToken}` /* this is the JWT token from AWS Cognito. */,
+            "Content-Type": "application/json",
+          },
+        }
+      )
+      .then((response) => {
+        console.log(typeof response.data);
+
+        AsyncStorage.setItem(DB_DEVICE_STATUS, response.data).catch((error) => {
+          console.log(error);
+        });
+        //console.log(covidStatus + ": covid status updated");
+      })
+      .then(() => {
+        //console.log("contacts array" + contactsArray);
+      })
+      .catch((error) => {
+        //console.log("axios hatası");
+        console.log(error);
+      });
+  }
+
   async function cleanAsyncStorages() {
     try {
-      await AsyncStorage.multiRemove(["@save_covid_status", "@covid_codes"]);
+      await AsyncStorage.multiRemove([
+        "@save_covid_status",
+        "@covid_codes",
+        "@db_device_status",
+        "@local_device_status",
+      ]);
     } catch (e) {
       // clear error
     }
@@ -82,7 +142,7 @@ export const CovidStatusProvider = ({ children }) => {
         //console.log("contacts array" + contactsArray);
       })
       .catch((error) => {
-        //console.log("axios hatası");
+        console.log("axios hatası");
         console.log(error);
       });
 
@@ -128,12 +188,22 @@ export const CovidStatusProvider = ({ children }) => {
       covid_status: "Positive",
       update_date: Date.now(),
     });
+
     await AsyncStorage.setItem(COVID_STATUS, jsonValue)
       .then(() => getCovidStatus())
-      //.then(()=>sendCovidStatusPositive) //bu kodu ekleyeceğiz
       .catch((error) => {
         console.log(error);
       });
+
+    var dbDeviceStatus = await AsyncStorage.getItem(DB_DEVICE_STATUS);
+    console.log("dbDeviceStatus: " + dbDeviceStatus);
+
+    await AsyncStorage.setItem(LOCAL_DEVICE_STATUS, dbDeviceStatus);
+
+    //const localDeviceStatus = await AsyncStorage.getItem(LOCAL_DEVICE_STATUS);
+    //console.log("localDeviceStatus: " + localDeviceStatus);
+
+    //.then(()=>sendCovidStatusPositive) //bu kodu ekleyeceğiz
   }
 
   async function produceCovidCode() {
@@ -156,13 +226,16 @@ export const CovidStatusProvider = ({ children }) => {
       if (storedCovidStatus === null) {
         // which means first time for the user, initializing all local storages
 
+        await initializeLocalDeviceStatus();
+
         // initialize COVID_STATUS
         const newCovidCode = await produceCovidCode();
         const jsonValue = JSON.stringify({
-          covid_code: `${newCovidCode}`,
+          covid_code: newCovidCode,
           covid_status: "Negative",
           update_date: Date.now(),
         });
+        console.log("newCovidCode:" + jsonValue);
         await AsyncStorage.setItem(COVID_STATUS, jsonValue).catch((error) => {
           console.log(error);
         });
@@ -186,21 +259,24 @@ export const CovidStatusProvider = ({ children }) => {
         const covidCodeProductionDate =
           JSON.parse(storedCovidStatus)["update_date"];
         const daysPassed = Math.round(
-          //(Date.now() - covidCodeProductionDate) / (1000 * 3600 * 24) // days
-          (((Date.now() - covidCodeProductionDate) % 86400000) % 3600000) /
-            60000 // minutes
+          (Date.now() - covidCodeProductionDate) / (1000 * 3600 * 24) // days
+          //(((Date.now() - covidCodeProductionDate) % 86400000) % 3600000) / 60000
+          // // minutes
         );
 
         // generating new code every day
 
         if (daysPassed < 1) {
           // code generated on that day already, no need to produce new code
-
+          console.log(
+            "BURDAYIZ covid code:" + JSON.parse(storedCovidStatus)["covid_code"]
+          );
           const covidCode = JSON.parse(storedCovidStatus)["covid_code"];
+          console.log("async storage covidCode: " + covidCode);
           setCurrentCovidCode(covidCode);
 
           console.log(
-            "less than one minute has passed... your unique covid code is " +
+            "less than one day has passed... your unique covid code is " +
               covidCode
           );
         } else {
@@ -237,13 +313,13 @@ export const CovidStatusProvider = ({ children }) => {
             console.log(e);
           }
           console.log(
-            "more than one minute has passed.... your new unique covid code is " +
+            "more than one day has passed.... your new unique covid code is " +
               newCovidCode
           );
         }
       }
     } catch (e) {
-      console.log(e);
+      console.log("storedDeviceStatus'e erişemedim:" + e);
     }
   }
 
@@ -318,6 +394,8 @@ export const CovidStatusProvider = ({ children }) => {
         addStudentCovidCode,
         checkIfContacted,
         contacted,
+        getCurrentCovidCode,
+        getDbDeviceStatus,
       }}
     >
       {children}

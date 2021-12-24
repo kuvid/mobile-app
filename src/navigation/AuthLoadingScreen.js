@@ -11,10 +11,15 @@ import StudentListContext from "../context/StudentListContext";
 import CovidStatusContext from "../context/CovidStatusContext";
 
 export default function AuthLoadingScreen() {
-  const { token, loading, loadApp, group } = useContext(AuthContext);
+  const { token, loading, loadApp, group, idNumber } = useContext(AuthContext);
   const { pullData, cleanData } = useContext(AttendanceDataContext);
   const { getStudentList } = useContext(StudentListContext);
-  const { getCovidStatus, checkIfContacted } = useContext(CovidStatusContext);
+  const {
+    getCovidStatus,
+    checkIfContacted,
+    getCurrentCovidCode,
+    getDbDeviceStatus,
+  } = useContext(CovidStatusContext);
 
   useEffect(() => {
     cleanData();
@@ -22,12 +27,15 @@ export default function AuthLoadingScreen() {
   }, []);
 
   useEffect(() => {
+    getCurrentCovidCode();
     checkIfContacted();
+    getDbDeviceStatus();
     getCovidStatus();
     if (group === "Student") pullData();
     else {
       getStudentList();
     }
+    console.log("idNumber: " + idNumber);
   }, [loading]);
 
   const showLoadingSpinner = !token && loading;

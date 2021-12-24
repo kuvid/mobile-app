@@ -199,7 +199,7 @@
 				LastUpgradeCheck = 1130;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = HTTY2STDC8;
+						DevelopmentTeam = S54NRK54X6;
 						LastSwiftMigration = 1120;
 					};
 				};
@@ -378,7 +378,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = kuvid/app.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = HTTY2STDC8;
+				DEVELOPMENT_TEAM = S54NRK54X6;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"$(inherited)",
@@ -392,7 +392,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = kuvid.ble.app;
+				PRODUCT_BUNDLE_IDENTIFIER = kuvid.ble.ipek.app;
 				PRODUCT_NAME = app;
 				SWIFT_OBJC_BRIDGING_HEADER = "kuvid/kuvid-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -410,7 +410,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = kuvid/app.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = HTTY2STDC8;
+				DEVELOPMENT_TEAM = S54NRK54X6;
 				INFOPLIST_FILE = kuvid/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -419,7 +419,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = kuvid.ble.app;
+				PRODUCT_BUNDLE_IDENTIFIER = kuvid.ble.ipek.app;
 				PRODUCT_NAME = app;
 				SWIFT_OBJC_BRIDGING_HEADER = "kuvid/kuvid-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;

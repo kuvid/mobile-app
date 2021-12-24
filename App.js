@@ -7,9 +7,11 @@ import { AuthProvider } from "./src/context/AuthContext";
 import { CovidStatusProvider } from "./src/context/CovidStatusContext";
 import { StudentListProvider } from "./src/context/StudentListContext";
 import { NotificationProvider } from "./src/context/NotificationContext";
+import { LogBox } from "react-native";
 
 Amplify.configure(awsConfig);
 
+LogBox.ignoreAllLogs(true);
 //import { withAuthenticator } from "aws-amplify-react-native";
 
 export default function App() {

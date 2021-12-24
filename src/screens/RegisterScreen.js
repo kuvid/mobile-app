@@ -8,6 +8,8 @@ import AuthContext from "../context/AuthContext";
 import Peripheral, { Service, Characteristic } from "react-native-peripheral";
 import { Platform } from "react-native";
 
+import UUIDGenerator from "react-native-uuid-generator";
+
 import BLEAdvertiser from "react-native-ble-advertiser";
 
 export default function RegisterScreen({ navigation }) {
@@ -24,13 +26,17 @@ export default function RegisterScreen({ navigation }) {
         // wait until Bluetooth is ready
 
         var ch1, service1;
-
+        console.log("currentCovidCode: " + currentCovidCode);
+        var serviceUuid;
         if (state === "poweredOn") {
           // first, define a characteristic with a value
           Peripheral.removeAllServices()
             .then(() => {
+              //serviceUuid = UUIDGenerator.getRandomUUID();
+            })
+            .then(() => {
               ch1 = new Characteristic({
-                uuid: `${charUuid}`,
+                uuid: "AAAAAAAA-7c43-4f66-b921-4d77bf7a3aba",
                 value: "c2VsaW4=", // Base64-encoded string
                 properties: ["read", "write"],
                 permissions: ["readable", "writeable"],
@@ -38,7 +44,7 @@ export default function RegisterScreen({ navigation }) {
             })
             .then(() => {
               service1 = new Service({
-                uuid: `${currentCovidCode}`,
+                uuid: `${charUuid}`,
                 characteristics: [ch1],
               });
             })
@@ -47,28 +53,22 @@ export default function RegisterScreen({ navigation }) {
                 .then(() =>
                   // start advertising to make your device discoverable
                   Peripheral.startAdvertising({
-                    name: `KUvid ${name} ${familyName} ${idNumber}`,
+                    name: `KU ${name} ${familyName} ${idNumber}`,
                     //name: "KUvid",
-                    serviceUuids: [currentCovidCode],
+                    serviceUuids: [charUuid],
                   })
                 )
                 .then(() => {
-                  console.log("started advertising...");
-                  setMessage("started advertising...");
+                  //console.log("started advertising...");
+                  setMessage("Self-Registering...");
                 })
                 .then(() => {
                   setTimeout(() => {
                     Peripheral.stopAdvertising();
-                    console.log("stopped advertising...");
-                    setMessage("stopped advertising...");
+                    //console.log("Done!");
+                    setMessage("Done!");
+                    setSpinnerShown(false);
                   }, 10000);
-                })
-                .then(() => {
-                  setTimeout(() => {
-                    Peripheral.removeAllServices();
-                    console.log("removed all services...");
-                    setMessage("removed all services...");
-                  }, 11000);
                 });
             });
         }
@@ -95,11 +95,14 @@ export default function RegisterScreen({ navigation }) {
       style={{
         flex: 1,
         alignItems: "center",
+        justifyContent: "center",
         backgroundColor: "white",
       }}
     >
       <View>
-        <Text>{message}</Text>
+        <Text style={[styles.boldText, styles.profileTextTopMargin]}>
+          {message}
+        </Text>
       </View>
       {spinnerShown ? (
         <View style={styles.container}>
@@ -107,9 +110,9 @@ export default function RegisterScreen({ navigation }) {
         </View>
       ) : null}
       {!spinnerShown ? (
-        <View>
+        <View style={styles.container}>
           <Text style={[styles.boldText, styles.profileTextTopMargin]}>
-            Attendance data successfully saved for this course!
+            Attendance data successfully sent for this course!
           </Text>
           <Icon
             iconStyle={{ color: "#94DE45" }}

@@ -25,6 +25,7 @@ export default function TakeAttendanceScreen() {
     addNewStudent,
     newStudents,
     registeredStudents,
+    getRegisteredStudents,
   } = useContext(StudentListContext);
 
   const { addStudentCovidCode } = useContext(CovidStatusContext);
@@ -35,7 +36,9 @@ export default function TakeAttendanceScreen() {
     //sendStudentList();
     const interval = setInterval(() => {
       setSpinnerShown(false);
-    }, 30000);
+      var tempStudentList = getRegisteredStudents();
+      //sendStudentList(tempStudentList);
+    }, 5000);
 
     return () => clearInterval(interval);
   }, []);
@@ -72,13 +75,16 @@ export default function TakeAttendanceScreen() {
       return;
     }
     //setDeviceNames(device.name);
-    console.log("device gördüm: " + device.name);
-    if (device.name !== null && device.name.includes("KUvid")) {
+    if (device.name !== null) {
+      console.log("device gördüm: " + device.name);
+    }
+
+    if (device.name !== null && device.name.includes("KU")) {
       //alert(device.name);
       //setDeviceNames([...deviceNames, device.name]);
       //addAttendanceData(device.name);
-      console.log("KUvid buldum: " + device.name);
-      manager.stopDeviceScan();
+      console.log("KU buldum: " + device.name);
+      //manager.stopDeviceScan();
       //console.log(device);
 
       // await device.connect();
@@ -86,6 +92,16 @@ export default function TakeAttendanceScreen() {
       // const services = await device.services();
       // const characteristicForOneService = await services[0].characteristics();
       // console.log(characteristicForOneService);
+
+      addNewStudent(device.name, device.id)
+        .then(() =>
+          console.log("device buldum contexte ekledim: " + device.name)
+        )
+        .then(() => {
+          return device.name;
+        })
+        .catch((error) => console.log(error));
+
       device
         .connect()
         .then((device) => {
@@ -97,9 +113,10 @@ export default function TakeAttendanceScreen() {
         })
         .then((services) => {
           services.forEach((element) => {
-            console.log(element);
+            console.log(element.uuid);
           });
-        });
+        })
+        .then(() => device.disconnect());
       //     //     console.log("anonymous device buldum contexte ekledim:")
       //     //   )
       //     //   .then(() => {
@@ -161,7 +178,7 @@ export default function TakeAttendanceScreen() {
       console.log("30 SANİYE GEÇTİİİİİİK");
       manager.stopDeviceScan();
     } else {
-      console.log("unknown device found");
+      //console.log("unknown device found");
     }
     //console.log("5 saniye geçmemiş");
     //   // Proceed with connection.

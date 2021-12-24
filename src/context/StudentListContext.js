@@ -13,13 +13,15 @@ export const StudentListProvider = ({ children }) => {
 
   const [studentList, setStudentList] = useState([]);
 
-  const [newStudents, setNewStudents] = useState([
-    { studentName: "KUvid Selin Öztürk 60160", deviceId: "12345" },
-  ]);
+  // const [newStudents, setNewStudents] = useState([
+  //   { studentName: "KUvid Selin Öztürk 60160", deviceId: "12345" },
+  // ]);
+
+  const [newStudents, setNewStudents] = useState([]);
 
   const [registeredStudents, setRegisteredStudents] = useState([]);
 
-  const [courseName, setCourseName] = useState("comp130");
+  const [courseName, setCourseName] = useState("Comp101");
 
   useEffect(() => {
     arrangeStudentNames();
@@ -27,28 +29,40 @@ export const StudentListProvider = ({ children }) => {
 
   async function addNewStudent(studentName, deviceId) {
     return new Promise((resolve, reject) => {
-      setNewStudents((prev) =>
+      /*setNewStudents((prev) =>
         _.uniqBy(
           [...prev, { studentName: studentName, deviceId: deviceId }],
           "studentName"
         )
-      );
+      );*/
 
       // bu kısım test edilmedi
       const myArray = studentName.split(" ");
-      const student_id = myArray.pop();
+      const id = myArray.pop();
       myArray.reverse();
-      myArray.pop(); // pop KUvid
+      myArray.pop(); // pop KU
       myArray.reverse();
-      var student_name = myArray.join(" ");
-      var student = {
-        student_name: student_name,
-        student_id: student_id,
-      };
-      setRegisteredStudents((prev) => _uniqBy([...prev, student], student_id));
+      var name = myArray.join(" ");
+
+      setRegisteredStudents((prev) =>
+        _.uniqBy(
+          [
+            ...prev,
+            {
+              student_name: name,
+              student_id: id,
+            },
+          ],
+          "student_id"
+        )
+      );
       resolve();
     });
   }
+
+  const getRegisteredStudents = () => {
+    return registeredStudents;
+  };
 
   // bu fonksiyon şu an sadece test amaçlı burda
   const arrangeStudentNames = async () => {
@@ -75,7 +89,7 @@ export const StudentListProvider = ({ children }) => {
   };
 
   // BU KOD INSTRUCTOR TARAFINDA ÇALIŞACAK, STUDENT LIST CONTEXT GİBİ BİR ŞEY GEREKEBİLİR
-  const sendStudentList = async () => {
+  const sendStudentList = async (tempStudentList) => {
     await axios
       .post(
         "https://3mc5pe0gw4.execute-api.eu-central-1.amazonaws.com/Production/kuvid_take_attendance",
@@ -85,11 +99,11 @@ export const StudentListProvider = ({ children }) => {
             TableName: "attendance",
             Item: {
               lecture_name: `${courseName}`,
-              timestamp: "2021-11-26T12:35:00",
+              lecture_time: "2021-12-23T12:35:00",
               instructor_id: parseInt(`${idNumber}`),
               instructor_name: `${name} ${familyName}`,
               instructor_email: `${email}`,
-              students: registeredStudents,
+              students: tempStudentList,
             },
           },
         },
@@ -140,6 +154,7 @@ export const StudentListProvider = ({ children }) => {
         studentList,
         newStudents,
         registeredStudents,
+        getRegisteredStudents,
         sendStudentList,
         getStudentList,
         addNewStudent,
